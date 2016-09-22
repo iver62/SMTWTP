@@ -15,9 +15,9 @@ public class VND {
 	}
 	
 	public static void main(String[] args) {
-		ArrayList<Ordonnancement> lesOrdonnancements = MyFileReader.load("wt100.txt", 100);
+		ArrayList<Ordonnancement> lesOrdonnancements = MyFileReader.load("data/wt100.txt", 100);
 		
-		if (args.length == 6) { // on verife qu'il y a bien 6 parametres
+		if (args.length == 6) { // on verifie qu'il y a bien 6 parametres
 			String p0 = args[0]; // -select
 			String select = args[1]; // first ou best
 			String p1 = args[2]; // -init
