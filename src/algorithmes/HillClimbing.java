@@ -31,7 +31,7 @@ public class HillClimbing {
 						if (voisinage.equals("insert")) { // si on a choisi l'insertion
 							for (int k = 0; k < nbRuns; k++) {
 								long debut = System.currentTimeMillis();
-								sol = ngb.insert(select); // l'evaluation du meilleur voisin selon first ou best
+//								sol = ngb.insert(select); // l'evaluation du meilleur voisin selon first ou best
 								total += System.currentTimeMillis()-debut;
 							}
 						}
@@ -70,7 +70,7 @@ public class HillClimbing {
 						if (voisinage.equals("insert")) { // si on a choisi l'insertion
 							for (int k = 0; k < nbRuns; k++) {
 								long debut = System.currentTimeMillis();
-								sol = ngb.insert(select);
+//								sol = ngb.insert(select);
 								total += System.currentTimeMillis()-debut;
 							}
 						}
@@ -102,9 +102,9 @@ public class HillClimbing {
 				else if (init.equals("mdd")) {
 					for (int n = 0; n < lesOrdonnancements.size(); n++) {
 						long total = 0;
-						Ordonnancement mdd_ord = MDD.run(lesOrdonnancements.get(n)); // algorithme mdd
-						Neighborhood ngb = new Neighborhood(mdd_ord);
-						int sol = 0;
+						Ordonnancement mdd_ord = MDD.run(lesOrdonnancements.get(n)); // solution initiale - algorithme mdd
+						Neighborhood ngb = new Neighborhood(mdd_ord); // voisinage de la solution initiale
+						Ordonnancement sol = null;
 						
 						if (voisinage.equals("insert")) { // si on a choisi l'insertion
 							for (int k = 0; k < nbRuns; k++) {
@@ -117,7 +117,7 @@ public class HillClimbing {
 						else if (voisinage.equals("swap")) { // si on a choisi la permutation
 							for (int k = 0; k < nbRuns; k++) {
 								long debut = System.currentTimeMillis();
-								sol = ngb.swap(select);
+//								sol = ngb.swap(select);
 								total += System.currentTimeMillis()-debut;
 							}
 						}
@@ -125,16 +125,16 @@ public class HillClimbing {
 						else if (voisinage.equals("exchange")) { // si on a choisi l'echange
 							for (int k = 0; k < nbRuns; k++) {
 								long debut = System.currentTimeMillis();
-								sol = ngb.exchange(select);
+//								sol = ngb.exchange(select);
 								total += System.currentTimeMillis()-debut;
 							}
 						}
 						
 						double best = MyFileReader.bestSolution(n);
 						long d = total / 30;
-						double dev = 100 * (sol-best) / best;
+						double dev = 100 * (sol.eval()-best) / best;
 						
-						System.out.println("n=" + n + " " + d + "ms" + " " + mdd_ord.eval() + " " + sol + " " + dev);
+						System.out.println("n=" + n + " " + d + "ms" + " " + mdd_ord.eval() + " " + sol.eval() + " " + dev);
 					}
 				}
 			}

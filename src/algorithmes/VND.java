@@ -44,6 +44,7 @@ public class VND {
 							if (i == 0) {
 								if (ngbh.exchange(select) < sol) {
 									sol = ngbh.exchange(select);
+//									ngbh = new Neighborhood(sol);
 								}
 								else {
 									i = (++i < 3) ? i : 0;

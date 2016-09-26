@@ -17,14 +17,16 @@ public class Neighborhood {
 	 * @param select first ou best
 	 * @return l'evaluation du meilleur voisin
 	 */
-	public int insert(String select) {
-		int sol = o.eval(); // l'evaluation de la solution initiale
+	public Ordonnancement insert(String select) {
+		int e = o.eval(); // l'evaluation de la solution initiale
+		Ordonnancement sol = new Ordonnancement(o.getLesTaches());
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
 				if (i != j) {
 					o.insert(i, j);
-					if (o.eval() < sol) {
-						sol = o.eval();
+					if (o.eval() < e) {
+//						sol = o.eval();
+						sol = new Ordonnancement(o.getLesTaches());
 						if (select.equals("first")) { // si on a choisi first on a trouve la solution donc on sort de la boucle
 							o.insert(j, i);
 							return sol;
