@@ -2,8 +2,11 @@ package algorithmes;
 
 import java.util.ArrayList;
 
+import Models.Exchange;
+import Models.Insert;
 import Models.Neighborhood;
 import Models.Ordonnancement;
+import Models.Swap;
 import Utils.MyFileReader;
 
 public class VND {
@@ -30,101 +33,112 @@ public class VND {
 			int n = Integer.parseInt(args[5]); // le numero de l'ordonnancement
 			
 			if (checkParameters(p0, p1, p2, select, init)) { // on verifie si les parametres sont corrects
-				System.out.println("Resulats " + init);
 				
 				if (n < lesOrdonnancements.size()) { // si on a choisi un ordonnancement valide
+					System.out.println("Resulat " + init + " " + select + " instance " + n);
 					Ordonnancement o = lesOrdonnancements.get(n); // l'ordonnancement choisi
-//					int sol = o.eval();
-//					Neighborhood ngbh = new Neighborhood(o);
 //					String[] voisinages = {ngbh.exchange(select), ngbh.swap(select), ngbh.insert(select)};
 //					String[] voisinages = {"exchange", "swap", "insert"};
+					Neighborhood ngb;
 					
 					if (init.equals("rnd")) { // si la solution initiale est RND
-						Ordonnancement sol = RND.run(o); // solution initiale
-						Neighborhood ngbh = new Neighborhood(sol);
-//						int sol = rnd_ord.eval();
-//						Ordonnancement sol = null;
+						RND rnd = new RND(o);
+						Ordonnancement sol = rnd.run(); // solution initiale
+						System.out.println(sol.eval() + " t=0ms");
 						int i = 0, k = 0;
+						long debut = System.currentTimeMillis();
+						
 						while (k < t) {
-							if (i == 0) {
-								if (ngbh.exchange(select).eval() < sol.eval()) {
-									sol = ngbh.exchange(select);
-//									ngbh = new Neighborhood(sol);
+														
+							if (i == 0) { // voisinage exchange
+								ngb = new Exchange(sol);
+								if (ngb.run(select).eval() < sol.eval()) { // s'il y a un meilleur voisin dans le voisinage exchange
+									sol = ngb.run(select); // nouvel optimum local dans le voisinage exchange
+									System.out.println(sol.eval() + " t=" + (System.currentTimeMillis()-debut) +"ms");
+								}
+								else {
+									i = (++i < 3) ? i : 0; // on passe au voisinage suivant
+								}
+							}
+							
+							else if (i == 1) { // voisinage swap
+								ngb = new Swap(sol);
+								if (ngb.run(select).eval() < sol.eval()) {
+									sol = ngb.run(select);
+									System.out.println(sol.eval() + " t=" + (System.currentTimeMillis()-debut) +"ms");
 								}
 								else {
 									i = (++i < 3) ? i : 0;
 								}
 							}
-							else if (i == 1) {
-								if (ngbh.swap(select).eval() < sol.eval()) {
-									sol = ngbh.swap(select);
+							
+							else if (i == 2) { // voisinage insert
+								ngb = new Insert(sol);
+								if (ngb.run(select).eval() < sol.eval()) {
+									sol = ngb.run(select);
+									System.out.println(sol.eval() + " t=" + (System.currentTimeMillis()-debut) +"ms");
 								}
 								else {
 									i = (++i < 3) ? i : 0;
 								}
 							}
-							else if (i == 2) {
-								if (ngbh.insert(select).eval() < sol.eval()) {
-									sol = ngbh.insert(select);
-								}
-								else {
-									i = (++i < 3) ? i : 0;
-								}
-							}
+							
 							k++;
 						}
 						
 						double best = MyFileReader.bestSolution(n);
 						double dev = 100 * (sol.eval()-best) / best; // la deviation par rapport a la meilleure solution connue
-						System.out.println(sol.eval() + " " + dev);
+						System.out.println("deviation=" + dev);
 					}
 					
-					else if (init.equals("mdd")) {
-						Ordonnancement sol = MDD.run(o); // solution initiale
-						Neighborhood ngbh = new Neighborhood(sol);
-//						int sol = mdd_ord.eval();
+					else if (init.equals("mdd")) { // si la solution initiale est MDD
+						MDD mdd = new MDD(o);
+						Ordonnancement sol = mdd.run(); // solution initiale
+						System.out.println(sol.eval() + " t=0ms");
 						int i = 0, k = 0;
+						long debut = System.currentTimeMillis();
+						
 						while (k < t) {
-							if (i == 0) {
-								if (ngbh.exchange(select).eval() < sol.eval()) {
-									sol = ngbh.exchange(select);
-									ngbh = new Neighborhood(sol);
-									System.out.println(sol.eval());
-//									i = 0;
+							
+							if (i == 0) { // voisinage exchange
+								ngb = new Exchange(sol);
+								if (ngb.run(select).eval() < sol.eval()) {
+									sol = ngb.run(select);
+									System.out.println(sol.eval() + " t=" + (System.currentTimeMillis()-debut) +"ms");
 								}
 								else {
 									i = (++i < 3) ? i : 0;
 								}
 							}
-							else if (i == 1) {
-								if (ngbh.swap(select).eval() < sol.eval()) {
-									sol = ngbh.swap(select);
-									ngbh = new Neighborhood(sol);
-									System.out.println(sol.eval());
-//									i = 0;
+							
+							else if (i == 1) { // voisinage swap
+								ngb = new Swap(sol);
+								if (ngb.run(select).eval() < sol.eval()) {
+									sol = ngb.run(select);
+									System.out.println(sol.eval() + " t=" + (System.currentTimeMillis()-debut) +"ms");
 								}
 								else {
 									i = (++i < 3) ? i : 0;
 								}
 							}
-							else if (i == 2) {
-								if (ngbh.insert(select).eval() < sol.eval()) {
-									sol = ngbh.insert(select);
-									ngbh = new Neighborhood(sol);
-									System.out.println(sol.eval());
-//									i = 0;
+							
+							else if (i == 2) { // voisinage insert
+								ngb = new Insert(sol);
+								if (ngb.run(select).eval() < sol.eval()) {
+									sol = ngb.run(select);
+									System.out.println(sol.eval() + " t=" + (System.currentTimeMillis()-debut) +"ms");
 								}
 								else {
 									i = (++i < 3) ? i : 0;
 								}
 							}
+							
 							k++;
-//							System.out.println(k);
 						}
 						
 						double best = MyFileReader.bestSolution(n);
 						double dev = 100 * (sol.eval()-best) / best; // la deviation par rapport a la meilleure solution connue
-						System.out.println(sol.eval() + " " + dev);
+						System.out.println("deviation=" + dev);
 					}
 					
 				}

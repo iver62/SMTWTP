@@ -48,6 +48,10 @@ public class Ordonnancement {
 		return lesTaches;
 	}
 	
+	public int getSize() {
+		return lesTaches.size();
+	}
+	
 	public String toString() {
 		String str = new String("Ordonnancement [lesTaches= ");
 		for (int i = 0; i < lesTaches.size(); i++) {
@@ -55,10 +59,6 @@ public class Ordonnancement {
 		}
 		str += "]";
 		return str;
-	}
-	
-	public int getSize() {
-		return lesTaches.size();
 	}
 	
 }
