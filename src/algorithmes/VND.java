@@ -8,10 +8,14 @@ import Utils.MyFileReader;
 
 public class VND {
 	
-	static int t = 100000;
+	static int t = 10000;
 
 	private static boolean checkParameters(String param0, String param1, String param2, String select, String init) {
-		return (param0.equals("-select")) && (param1.equals("-init")) && (param2.equals("-choose")) && (select.equals("first") || select.equals("best")) && (init.equals("rnd") || init.equals("edd") || init.equals("mdd"));
+		return (param0.equals("-select")) && 
+				(param1.equals("-init")) && 
+				(param2.equals("-choose")) && 
+				(select.equals("first") || select.equals("best")) && 
+				(init.equals("rnd") || init.equals("edd") || init.equals("mdd"));
 	}
 	
 	public static void main(String[] args) {
@@ -36,13 +40,14 @@ public class VND {
 //					String[] voisinages = {"exchange", "swap", "insert"};
 					
 					if (init.equals("rnd")) { // si la solution initiale est RND
-						Ordonnancement rnd_ord = RND.run(o); // solution initiale
-						Neighborhood ngbh = new Neighborhood(rnd_ord);
-						int sol = rnd_ord.eval();
+						Ordonnancement sol = RND.run(o); // solution initiale
+						Neighborhood ngbh = new Neighborhood(sol);
+//						int sol = rnd_ord.eval();
+//						Ordonnancement sol = null;
 						int i = 0, k = 0;
 						while (k < t) {
 							if (i == 0) {
-								if (ngbh.exchange(select) < sol) {
+								if (ngbh.exchange(select).eval() < sol.eval()) {
 									sol = ngbh.exchange(select);
 //									ngbh = new Neighborhood(sol);
 								}
@@ -51,7 +56,7 @@ public class VND {
 								}
 							}
 							else if (i == 1) {
-								if (ngbh.swap(select) < sol) {
+								if (ngbh.swap(select).eval() < sol.eval()) {
 									sol = ngbh.swap(select);
 								}
 								else {
@@ -59,7 +64,7 @@ public class VND {
 								}
 							}
 							else if (i == 2) {
-								if (ngbh.insert(select) < sol) {
+								if (ngbh.insert(select).eval() < sol.eval()) {
 									sol = ngbh.insert(select);
 								}
 								else {
@@ -70,49 +75,56 @@ public class VND {
 						}
 						
 						double best = MyFileReader.bestSolution(n);
-						double dev = 100 * (sol-best) / best; // la deviation par rapport a la meilleure solution connue
-						System.out.println(rnd_ord.eval() + " " + sol + " " + dev);
+						double dev = 100 * (sol.eval()-best) / best; // la deviation par rapport a la meilleure solution connue
+						System.out.println(sol.eval() + " " + dev);
 					}
 					
 					else if (init.equals("mdd")) {
-						Ordonnancement mdd_ord = MDD.run(o); // solution initiale
-						Neighborhood ngbh = new Neighborhood(mdd_ord);
-						int sol = mdd_ord.eval();
+						Ordonnancement sol = MDD.run(o); // solution initiale
+						Neighborhood ngbh = new Neighborhood(sol);
+//						int sol = mdd_ord.eval();
 						int i = 0, k = 0;
 						while (k < t) {
 							if (i == 0) {
-								if (ngbh.exchange(select) < sol) {
+								if (ngbh.exchange(select).eval() < sol.eval()) {
 									sol = ngbh.exchange(select);
-									i = 0;
+									ngbh = new Neighborhood(sol);
+									System.out.println(sol.eval());
+//									i = 0;
 								}
 								else {
 									i = (++i < 3) ? i : 0;
 								}
 							}
 							else if (i == 1) {
-								if (ngbh.swap(select) < sol) {
+								if (ngbh.swap(select).eval() < sol.eval()) {
 									sol = ngbh.swap(select);
-									i = 0;
+									ngbh = new Neighborhood(sol);
+									System.out.println(sol.eval());
+//									i = 0;
 								}
 								else {
 									i = (++i < 3) ? i : 0;
 								}
 							}
 							else if (i == 2) {
-								if (ngbh.insert(select) < sol) {
+								if (ngbh.insert(select).eval() < sol.eval()) {
 									sol = ngbh.insert(select);
-									i = 0;
+									ngbh = new Neighborhood(sol);
+									System.out.println(sol.eval());
+//									i = 0;
 								}
 								else {
 									i = (++i < 3) ? i : 0;
 								}
 							}
 							k++;
+//							System.out.println(k);
 						}
 						
 						double best = MyFileReader.bestSolution(n);
-						double dev = 100 * (sol-best) / best; // la deviation par rapport a la meilleure solution connue
-						System.out.println(mdd_ord.eval() + " " + sol + " " + dev);
+						double dev = 100 * (sol.eval()-best) / best; // la deviation par rapport a la meilleure solution connue
+						System.out.println(sol.eval() + " " + dev);
 					}
 					
 				}

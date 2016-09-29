@@ -26,12 +26,12 @@ public class HillClimbing {
 						long total = 0;
 						Ordonnancement rnd_ord = RND.run(lesOrdonnancements.get(n)); // la solution initiale
 						Neighborhood ngb = new Neighborhood(rnd_ord); // creation d'un voisinage par rapport a rnd_ord
-						int sol = 0; // l'evaluation de l'optimum local
+						Ordonnancement sol = null; // l'evaluation de l'optimum local
 						
 						if (voisinage.equals("insert")) { // si on a choisi l'insertion
 							for (int k = 0; k < nbRuns; k++) {
 								long debut = System.currentTimeMillis();
-//								sol = ngb.insert(select); // l'evaluation du meilleur voisin selon first ou best
+								sol = ngb.insert(select); // l'evaluation du meilleur voisin selon first ou best
 								total += System.currentTimeMillis()-debut;
 							}
 						}
@@ -54,9 +54,9 @@ public class HillClimbing {
 						
 						double best = MyFileReader.bestSolution(n);
 						long d = total / 30;
-						double dev = 100 * (sol-best) / best; // la deviation par rapport a la meilleure solution connue
+						double dev = 100 * (sol.eval()-best) / best; // la deviation par rapport a la meilleure solution connue
 						
-						System.out.println("n=" + n + " " + d + "ms" + " " + rnd_ord.eval() + " " + sol + " " + dev);
+						System.out.println("n=" + n + " " + d + "ms" + " " + rnd_ord.eval() + " " + sol.eval() + " " + dev);
 					}
 				}
 				
@@ -65,12 +65,12 @@ public class HillClimbing {
 						long total = 0;
 						Ordonnancement edd_ord = EDD.run(lesOrdonnancements.get(n)); // algorithme edd
 						Neighborhood ngb = new Neighborhood(edd_ord);
-						int sol = 0;
+						Ordonnancement sol = null;
 						
 						if (voisinage.equals("insert")) { // si on a choisi l'insertion
 							for (int k = 0; k < nbRuns; k++) {
 								long debut = System.currentTimeMillis();
-//								sol = ngb.insert(select);
+								sol = ngb.insert(select);
 								total += System.currentTimeMillis()-debut;
 							}
 						}
@@ -93,9 +93,9 @@ public class HillClimbing {
 						
 						double best = MyFileReader.bestSolution(n);
 						long d = total / 30;
-						double dev = 100 * (sol-best) / best;
+						double dev = 100 * (sol.eval()-best) / best;
 						
-						System.out.println("n=" + n + " " + d + "ms" + " " + edd_ord.eval() + " " + sol + " " + dev);
+						System.out.println("n=" + n + " " + d + "ms" + " " + edd_ord.eval() + " " + sol.eval() + " " + dev);
 					}
 				}
 				
@@ -117,7 +117,7 @@ public class HillClimbing {
 						else if (voisinage.equals("swap")) { // si on a choisi la permutation
 							for (int k = 0; k < nbRuns; k++) {
 								long debut = System.currentTimeMillis();
-//								sol = ngb.swap(select);
+								sol = ngb.swap(select);
 								total += System.currentTimeMillis()-debut;
 							}
 						}
@@ -125,7 +125,7 @@ public class HillClimbing {
 						else if (voisinage.equals("exchange")) { // si on a choisi l'echange
 							for (int k = 0; k < nbRuns; k++) {
 								long debut = System.currentTimeMillis();
-//								sol = ngb.exchange(select);
+								sol = ngb.exchange(select);
 								total += System.currentTimeMillis()-debut;
 							}
 						}
