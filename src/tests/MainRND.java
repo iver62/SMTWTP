@@ -2,9 +2,9 @@ package tests;
 
 import java.util.ArrayList;
 
-import Models.Ordonnancement;
-import Utils.MyFileReader;
 import algorithmes.RND;
+import models.Ordonnancement;
+import utils.MyFileReader;
 
 public class MainRND {
 

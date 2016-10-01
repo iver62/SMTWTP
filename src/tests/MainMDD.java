@@ -2,9 +2,9 @@ package tests;
 
 import java.util.ArrayList;
 
-import Models.Ordonnancement;
-import Utils.MyFileReader;
 import algorithmes.MDD;
+import models.Ordonnancement;
+import utils.MyFileReader;
 
 public class MainMDD {
 

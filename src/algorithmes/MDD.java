@@ -2,8 +2,8 @@ package algorithmes;
 
 import java.util.ArrayList;
 
-import Models.Ordonnancement;
-import Models.Tache;
+import models.Ordonnancement;
+import models.Tache;
 
 public class MDD {
 	
@@ -13,6 +13,10 @@ public class MDD {
 		this.o = o;
 	}
 
+	/**
+	 * Lance l'algorithme
+	 * @return un ordonnancement
+	 */
 	public Ordonnancement run() {
 		ArrayList<Tache> list = o.getLesTaches();
 		ArrayList<Tache> sol = new ArrayList<Tache>();

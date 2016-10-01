@@ -1,20 +1,23 @@
-package Models;
+package models;
 
 import java.util.ArrayList;
 
 public class Swap extends Neighborhood {
 
-	public Swap(Ordonnancement o) {
-		super(o);
+	public Swap() {	
+		super();
 	}
 	
 	/**
-	 * Retourne le meilleur voisin selon la methode des permutations. Si select = 'first' on retourne le premier
-	 * meilleur voisin, si select = 'best', on retourne l'evaluation du meilleur voisin parmi tous les voisins.
+	 * Retourne le meilleur d'un ordonnancement voisin selon la methode des permutations. Si select = 'first' on 
+	 * retourne le premier meilleur voisin, si select = 'best', on retourne l'evaluation du meilleur voisin parmi
+	 * tous les voisins.
 	 * @param select : first ou best
+	 * @param o : l'ordonnancement
 	 * @return le meilleur voisin
 	 */
-	public Ordonnancement run(String select) {
+	public Ordonnancement run(String select, Ordonnancement o) {
+		int n = o.getSize();
 		int e = o.eval(); // l'evaluation de la solution initiale
 		Ordonnancement sol = new Ordonnancement(new ArrayList<Tache>(o.getLesTaches())); // au debut le meilleur voisin correspond a la solution initiale
 		for (int i = 0; i < n; i++) {
@@ -32,6 +35,11 @@ public class Swap extends Neighborhood {
 			}
 		}
 		return sol;
+	}
+
+	@Override
+	public String toString() {
+		return "Swap";
 	}
 
 }

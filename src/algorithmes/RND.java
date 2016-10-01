@@ -2,7 +2,7 @@ package algorithmes;
 
 import java.util.Collections;
 
-import Models.Ordonnancement;
+import models.Ordonnancement;
 
 public class RND {
 	
@@ -12,6 +12,10 @@ public class RND {
 		this.o = o;
 	}
 
+	/**
+	 * Lance l'algorithme
+	 * @return un ordonnancement
+	 */
 	public Ordonnancement run() {
 		Collections.shuffle(o.getLesTaches());
 		return o;

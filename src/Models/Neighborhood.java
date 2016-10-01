@@ -1,15 +1,9 @@
-package Models;
+package models;
 
 public abstract class Neighborhood {
+		
+	public Neighborhood() {	}
 	
-	protected Ordonnancement o;
-	protected int n;
-	
-	public Neighborhood(Ordonnancement o) {
-		this.o = o;
-		n = o.getSize();
-	}
-	
-	public abstract Ordonnancement run(String select);
+	public abstract Ordonnancement run(String select, Ordonnancement o);
 
 }

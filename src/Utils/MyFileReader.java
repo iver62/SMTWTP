@@ -1,12 +1,12 @@
-package Utils;
+package utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Models.Ordonnancement;
-import Models.Tache;
+import models.Ordonnancement;
+import models.Tache;
 
 public class MyFileReader {
 	
