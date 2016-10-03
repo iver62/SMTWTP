@@ -28,7 +28,7 @@ public class MainVND {
 			int nbTaches = Integer.parseInt(args[1]);
 			String select = args[2]; // first ou best
 			String init = args[3]; // choix de la  solution initiale
-			int v = Integer.parseInt(args[4]); // choix du voisinage
+			int v = Integer.parseInt(args[4]); // choix de l'ordre des voisinages
 			int n = Integer.parseInt(args[5]); // le numero de l'ordonnancement
 			
 			if (checkParameters(select, init)) { // on verifie si les parametres sont corrects
@@ -43,12 +43,12 @@ public class MainVND {
 					List<Neighborhood> voisinages = new ArrayList<Neighborhood>(); // la liste des voisinages
 					voisinages.add(new Exchange());
 					// le premier voisinage
-					if (v == 0) {
+					if (v == 1) {
 						voisinages.add(new Swap());
 						voisinages.add(new Insert());
 					}
 					// le deuxieme voisinage
-					else {
+					else if (v == 2) {
 						voisinages.add(new Insert());
 						voisinages.add(new Swap());
 					}

@@ -13,7 +13,7 @@ public class Swap extends Neighborhood {
 	 * retourne le premier meilleur voisin, si select = 'best', on retourne l'evaluation du meilleur voisin parmi
 	 * tous les voisins.
 	 * @param select : first ou best
-	 * @param o : l'ordonnancement
+	 * @param o : un ordonnancement
 	 * @return le meilleur voisin
 	 */
 	public Ordonnancement run(String select, Ordonnancement o) {
