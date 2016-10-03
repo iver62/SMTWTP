@@ -7,7 +7,7 @@ import algorithmes.EDD;
 import algorithmes.MDD;
 import algorithmes.RND;
 import algorithmes.VND;
-import models.Exchange;
+import models.Interchange;
 import models.Insert;
 import models.Neighborhood;
 import models.Ordonnancement;
@@ -41,7 +41,7 @@ public class MainVND {
 					Ordonnancement initSol;
 					
 					List<Neighborhood> voisinages = new ArrayList<Neighborhood>(); // la liste des voisinages
-					voisinages.add(new Exchange());
+					voisinages.add(new Interchange());
 					// le premier voisinage
 					if (v == 1) {
 						voisinages.add(new Swap());

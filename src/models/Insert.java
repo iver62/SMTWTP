@@ -10,7 +10,7 @@ public class Insert extends Neighborhood {
 	
 	/**
 	 * Retourne le meilleur voisin d'un ordonnancement selon la methode des insertions. Si select = 'first' on 
-	 * retourne le premier meilleur voisin, si select = 'best', on retourne l'evaluation du meilleur voisin parmi
+	 * retourne le premier meilleur voisin, si select = 'best', on retourne le meilleur voisin parmi
 	 * tous les voisins.
 	 * @param select : first ou best
 	 * @param o : un ordonnancement

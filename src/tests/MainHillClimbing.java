@@ -6,7 +6,7 @@ import algorithmes.EDD;
 import algorithmes.HillClimbing;
 import algorithmes.MDD;
 import algorithmes.RND;
-import models.Exchange;
+import models.Interchange;
 import models.Insert;
 import models.Neighborhood;
 import models.Ordonnancement;
@@ -47,7 +47,7 @@ public class MainHillClimbing {
 						}
 							
 						else if (voisinage.equals("exchange")) { // si on a choisi l'echange
-							ngb = new Exchange();
+							ngb = new Interchange();
 						}
 							
 						hc = new HillClimbing(select, ngb, initSol, n);
@@ -69,7 +69,7 @@ public class MainHillClimbing {
 						}
 						
 						else if (voisinage.equals("exchange")) { // si on a choisi l'echange
-							ngb = new Exchange();
+							ngb = new Interchange();
 						}
 							
 						hc = new HillClimbing(select, ngb,  initSol, n);
@@ -91,7 +91,7 @@ public class MainHillClimbing {
 						}
 							
 						else if (voisinage.equals("exchange")) { // si on a choisi l'echange
-							ngb = new Exchange();
+							ngb = new Interchange();
 						}
 							
 						hc = new HillClimbing(select, ngb,  initSol, n);
