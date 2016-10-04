@@ -10,15 +10,19 @@ public class VND {
 	
 	private int t = 1000; // nombre maximal d'iterations sans amelioration
 	private List<Neighborhood> voisinages; // liste des voisinages
-	private String select; // strategie de selection du meilleur voisin 
-	private Ordonnancement initSol; // la solution initiale
+	private String select; // strategie de selection du meilleur voisin
+	private Heuristic h; // solution initiale
 	private int n; // la nieme instance
 	
-	public VND(List<Neighborhood> voisinages, String select, Ordonnancement initSol, int n) {
+	public VND(List<Neighborhood> voisinages, String select, Heuristic h, int n) {
 		this.voisinages = voisinages;
 		this.select = select;
-		this.initSol = initSol;
+		this.h = h;
 		this.n = n;
+	}
+	
+	public Ordonnancement generateInitialSolution() {
+		return h.run();
 	}
 	
 	/**
@@ -26,7 +30,7 @@ public class VND {
 	 */
 	public void run() {
 		int k = 0, i = 0;
-		Ordonnancement current = initSol;
+		Ordonnancement current = generateInitialSolution();
 		long time = 0;
 		long debut = System.currentTimeMillis();
 		System.out.println("Running...");

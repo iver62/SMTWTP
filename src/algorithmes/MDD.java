@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import models.Ordonnancement;
 import models.Tache;
 
-public class MDD {
-	
-	private Ordonnancement o;
-	
+public class MDD extends Heuristic {
+		
 	public MDD(Ordonnancement o) {
-		this.o = o;
+		super(o);
 	}
 
 	/**

@@ -38,16 +38,15 @@ public class MainVND {
 				if (n <= lesOrdonnancements.size()) { // si on a choisi un ordonnancement valide
 					
 					Ordonnancement o = lesOrdonnancements.get(n-1); // l'ordonnancement choisi
-					Ordonnancement initSol;
 					
 					List<Neighborhood> voisinages = new ArrayList<Neighborhood>(); // la liste des voisinages
 					voisinages.add(new Interchange());
-					// le premier voisinage
+					// le premier ensemble de voisinage
 					if (v == 1) {
 						voisinages.add(new Swap());
 						voisinages.add(new Insert());
 					}
-					// le deuxieme voisinage
+					// le deuxieme ensemble de voisinage
 					else if (v == 2) {
 						voisinages.add(new Insert());
 						voisinages.add(new Swap());
@@ -57,22 +56,19 @@ public class MainVND {
 					
 					if (init.equals("rnd")) { // si la solution initiale est RND
 						RND rnd = new RND(o);
-						initSol = rnd.run();
-						VND vnd = new VND(voisinages, select, initSol, n-1);
+						VND vnd = new VND(voisinages, select, rnd, n-1);
 						vnd.run();
 					}
 					
 					else if (init.equals("edd")) { // si la solution initiale est EDD
 						EDD edd = new EDD(o);
-						initSol = edd.run(); // solution initiale
-						VND vnd = new VND(voisinages, select, initSol, n-1);
+						VND vnd = new VND(voisinages, select, edd, n-1);
 						vnd.run();
 					}
 					
 					else if (init.equals("mdd")) { // si la solution initiale est MDD
 						MDD mdd = new MDD(o);
-						initSol = mdd.run(); // solution initiale
-						VND vnd = new VND(voisinages, select, initSol, n-1);
+						VND vnd = new VND(voisinages, select, mdd, n-1);
 						vnd.run();
 					}
 					

@@ -29,14 +29,12 @@ public class MainHillClimbing {
 				ArrayList<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
 				
 				System.out.println("Resulats " + select + " " + voisinage + " " + init);
-				Ordonnancement initSol; // la solution initiale
 				HillClimbing hc;
 				Neighborhood ngb = null;
 					
 				if (init.equals("rnd")) { // si la solution initiale est RND
 					for (int n = 0; n < lesOrdonnancements.size(); n++) {
 						RND rnd = new RND(lesOrdonnancements.get(n));
-						initSol = rnd.run(); 					
 							
 						if (voisinage.equals("insert")) { // si on a choisi l'insertion
 							ngb = new Insert();
@@ -50,7 +48,7 @@ public class MainHillClimbing {
 							ngb = new Interchange();
 						}
 							
-						hc = new HillClimbing(select, ngb, initSol, n);
+						hc = new HillClimbing(select, ngb, rnd, n);
 						hc.run();
 					}
 				}
@@ -58,7 +56,6 @@ public class MainHillClimbing {
 				else if (init.equals("edd")) { // si la solution initiale est EDD
 					for (int n = 0; n < lesOrdonnancements.size(); n++) {
 						EDD edd = new EDD(lesOrdonnancements.get(n));
-						initSol = edd.run();
 						
 						if (voisinage.equals("insert")) { // si on a choisi l'insertion
 							ngb = new Insert();
@@ -72,7 +69,7 @@ public class MainHillClimbing {
 							ngb = new Interchange();
 						}
 							
-						hc = new HillClimbing(select, ngb,  initSol, n);
+						hc = new HillClimbing(select, ngb,  edd, n);
 						hc.run();
 					}
 				}
@@ -80,7 +77,6 @@ public class MainHillClimbing {
 				else { // si la solution initiale est MDD
 					for (int n = 0; n < lesOrdonnancements.size(); n++) {
 						MDD mdd = new MDD(lesOrdonnancements.get(n));
-						initSol = mdd.run();
 							
 						if (voisinage.equals("insert")) { // si on a choisi l'insertion
 							ngb = new Insert();
@@ -94,7 +90,7 @@ public class MainHillClimbing {
 							ngb = new Interchange();
 						}
 							
-						hc = new HillClimbing(select, ngb,  initSol, n);
+						hc = new HillClimbing(select, ngb,  mdd, n);
 						hc.run();
 					}
 				}

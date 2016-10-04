@@ -9,14 +9,18 @@ public class HillClimbing {
 	private int nbRuns = 30;
 	private String select; // strategie de selection
 	private Neighborhood ngb; // voisinage
-	private Ordonnancement initSol; // la solution initiale
+	private Heuristic h; // solution initiale
 	private int n; // la nieme instance
 	
-	public HillClimbing(String select, Neighborhood ngb, Ordonnancement initSol, int n) {
+	public HillClimbing(String select, Neighborhood ngb, Heuristic h, int n) {
 		this.select = select;
 		this.ngb = ngb;
-		this.initSol = initSol;
+		this.h = h;
 		this.n = n;
+	}
+	
+	public Ordonnancement generateInitialSolution() {
+		return h.run();
 	}
 	
 	/**
@@ -24,6 +28,7 @@ public class HillClimbing {
 	 */
 	public void run() {
 		long total = 0;
+		Ordonnancement initSol = generateInitialSolution();
 		Ordonnancement sol = null;
 		
 		for (int k = 0; k < nbRuns; k++) {

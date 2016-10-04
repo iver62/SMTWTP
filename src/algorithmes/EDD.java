@@ -4,12 +4,10 @@ import java.util.Collections;
 
 import models.Ordonnancement;
 
-public class EDD {
-	
-	private Ordonnancement o;
-	
+public class EDD extends Heuristic {
+		
 	public EDD(Ordonnancement o) {
-		this.o = o;
+		super(o);
 	}
 
 	/**
