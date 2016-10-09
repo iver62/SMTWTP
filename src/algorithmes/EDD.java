@@ -11,12 +11,17 @@ public class EDD extends Heuristic {
 	}
 
 	/**
-	 * Lance l'algorithme
+	 * Lance l'algorithme. Cet algorithme trie les taches par ordre croissant.
 	 * @return un ordonnancement
 	 */
 	public Ordonnancement run() {
 		Collections.sort(o.getLesTaches());
 		return o;
+	}
+	
+	@Override
+	public String toString() {
+		return "edd";
 	}
 
 }

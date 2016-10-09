@@ -11,12 +11,17 @@ public class RND extends Heuristic {
 	}
 
 	/**
-	 * Lance l'algorithme
+	 * Lance l'algorithme qui permet de generer une solution aleatoire.
 	 * @return un ordonnancement
 	 */
 	public Ordonnancement run() {
 		Collections.shuffle(o.getLesTaches());
 		return o;
+	}
+	
+	@Override
+	public String toString() {
+		return "rnd";
 	}
 
 }

@@ -12,7 +12,8 @@ public class MDD extends Heuristic {
 	}
 
 	/**
-	 * Lance l'algorithme
+	 * Lance l'algorithme. Cet algorithme trie les taches par ordre croissant de leurs echeances modifiees
+	 * mddj := max{C + pj , dj} ou C est la somme des temps d'exucution des jobs deja ordonnances.
 	 * @return un ordonnancement
 	 */
 	public Ordonnancement run() {
@@ -36,4 +37,9 @@ public class MDD extends Heuristic {
 		return new Ordonnancement(sol);
 	}
 
+	@Override
+	public String toString() {
+		return "mdd";
+	}
+	
 }

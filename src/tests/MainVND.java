@@ -1,5 +1,6 @@
 package tests;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,6 @@ import models.Swap;
 import utils.MyFileReader;
 
 public class MainVND {
-	
-	private static boolean checkParameters(String select, String init) {
-		return (select.equals("first") || select.equals("best")) && 
-				(init.equals("rnd") || init.equals("edd") || init.equals("mdd"));
-	}
 	
 	public static void main(String[] args) {
 		
@@ -52,7 +48,12 @@ public class MainVND {
 						voisinages.add(new Swap());
 					}
 					
-					System.out.println("Resulat " + init + " " + select + " voisinages " + voisinages.toString() + " instance " + n);
+					String name = select+"_"+init+"_"+n;
+					
+					File file = new File("data/results/vnd/"+name+".dat");
+					file.delete(); // on ecrase le fichier precedent
+					
+					System.out.println("Resulat " + init + " " + select + " " + voisinages.toString() + " " + n);
 					
 					if (init.equals("rnd")) { // si la solution initiale est RND
 						RND rnd = new RND(o);
@@ -81,15 +82,20 @@ public class MainVND {
 			}
 			
 			else {
-				System.out.println("Usage : \n\tjava -jar SMTWTP_VND.jar <filename> <nbTaches> [first,best] [rnd,edd,mdd] [0,1] {0 ... n-1}");
+				System.out.println("Usage : \n\tjava -jar SMTWTP_VND.jar <filename> <nbTaches> [first,best] [rnd,edd,mdd] [1,2] {1 ... n}");
 			}
 			
 		}
 		
 		else {
-			System.out.println("Usage : \n\tjava -jar SMTWTP_VND.jar <filename> <nbTaches> [first,best] [rnd,edd,mdd] [0,1] {0 ... n-1}");
+			System.out.println("Usage : \n\tjava -jar SMTWTP_VND.jar <filename> <nbTaches> [first,best] [rnd,edd,mdd] [1,2] {1 ... n}");
 		}
 
+	}
+	
+	private static boolean checkParameters(String select, String init) {
+		return (select.equals("first") || select.equals("best")) && 
+				(init.equals("rnd") || init.equals("edd") || init.equals("mdd"));
 	}
 
 }

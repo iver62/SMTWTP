@@ -5,10 +5,11 @@ import java.util.List;
 import models.Neighborhood;
 import models.Ordonnancement;
 import utils.MyFileReader;
+import utils.MyFileWriter;
 
 public class VND {
 	
-	private int t = 1000; // nombre maximal d'iterations sans amelioration
+	private int stoppingCondition = 1000; // nombre maximal d'iterations sans amelioration
 	private List<Neighborhood> voisinages; // liste des voisinages
 	private String select; // strategie de selection du meilleur voisin
 	private Heuristic h; // solution initiale
@@ -29,30 +30,32 @@ public class VND {
 	 * Lance l'algorithme
 	 */
 	public void run() {
-		int k = 0, i = 0;
+		int sc = 0, i = 0;
 		Ordonnancement current = generateInitialSolution();
-		long time = 0;
+		double bestScore = MyFileReader.bestSolution(n); // l'evaluation de la meilleure solution connue
 		long debut = System.currentTimeMillis();
-		System.out.println("Running...");
 		
-		while (k < t) { // on sort de la boucle si on a effectue 1000 iterations sans amelioration
+		while (sc < stoppingCondition) { // on sort de la boucle si on a effectue 1000 iterations sans amelioration
 			Neighborhood ngb = voisinages.get(i);
 			Ordonnancement best = ngb.run(select, current); // le meilleur voisin de la solution courante dans le voisinage courant
+			
 			if (best.eval() < current.eval()) { // s'il est meilleur que la solution courante
+				long d = System.currentTimeMillis()-debut;
 				current = best; // nouvel optimum local dans le voisinage courant
-				time = System.currentTimeMillis()-debut;
-				k = 0; // une meilleure solution a ete trouvee k est reinitialise
+				double dev = 100 * (current.eval()-bestScore) / bestScore; // la deviation par rapport a la meilleure solution connue
+				
+				MyFileWriter.writeData("data/results/vnd/"+select+"_"+h.toString()+"_"+(n+1)+".dat", dev, d);
+				System.out.println(current.eval() + " t=" + d + "ms" + " deviation=" + dev);
+				sc = 0; // une meilleure solution a ete trouvee k est reinitialise
+				i = 0; // on revient au premir voisinage
 			}
+			
 			else {
-				i = (++i < voisinages.size()) ? i : 0; // on passe au voisinage suivant
-				k++; // pas d'amelioration k est incremente
+				i = (++i < voisinages.size()) ? i : (voisinages.size()-1); // on passe au voisinage suivant
+				sc++; // pas d'amelioration k est incremente
 			}
+			
 		}
-		
-		double bestScore = MyFileReader.bestSolution(n); // l'evaluation de la meilleure solution connue
-		double dev = 100 * (current.eval()-bestScore) / bestScore; // la deviation par rapport a la meilleure solution connue
-		System.out.println("Done");
-		System.out.println(current.eval() + " t=" + time + "ms" + " deviation=" + dev);
 	}
 
 }
