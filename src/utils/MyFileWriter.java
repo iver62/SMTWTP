@@ -31,5 +31,19 @@ public class MyFileWriter {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void writeData(String filename, int[] evals, String[] devs, long[] times) {
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+			for (int i = 0; i < evals.length; i++) {
+				bw.write(" " + evals[i] + " " + devs[i] + " " + times[i]);
+				bw.newLine();
+			}
+			bw.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

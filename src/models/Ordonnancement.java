@@ -1,14 +1,21 @@
 package models;
 import java.util.ArrayList;
 
+import utils.MyFileReader;
+
 public class Ordonnancement {
 	
 	private ArrayList<Tache> lesTaches;
+	private long time;
 
 	public Ordonnancement(ArrayList<Tache> lesTaches) {
 		this.lesTaches = lesTaches;
 	}
 	
+	/**
+	 * fonction d'evaluation de l'ordonnancement
+	 * @return le resultat de l'evaluation
+	 */
 	public int eval() {
 		int sum = 0;
 		int c = 0;
@@ -17,6 +24,17 @@ public class Ordonnancement {
 			sum += t.getW() * Math.max(c-t.getD(), 0);
 		}
 		return sum;
+	}
+	
+	/**
+	 * Calcule la deviation par rapport a la meilleure solution connue
+	 * @param n la nieme instance
+	 * @return un pourcentage
+	 */
+	public double deviation(int n) {
+		double bestScore = MyFileReader.bestSolution(n); // la meilleure solution connue de la nieme instance
+		double dev = (this.eval() == 0 && bestScore == 0) ? 0 : 100 * (this.eval()-bestScore)/bestScore; // la deviation par rapport a la meilleure solution connue
+		return dev;
 	}
 	
 	/**
@@ -31,7 +49,7 @@ public class Ordonnancement {
 	}
 	
 	/**
-	 * Inter-echange deux taches aux positions i et j
+	 * Permute deux taches aux positions i et j
 	 * @param i : l'indice de la 1ere tache
 	 * @param j : l'indice de la 2eme tache
 	 */
@@ -48,10 +66,18 @@ public class Ordonnancement {
 		return lesTaches;
 	}
 	
-	public int getSize() {
+	public int size() {
 		return lesTaches.size();
 	}
 	
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
 	public String toString() {
 		String str = new String("Ordonnancement [lesTaches= ");
 		for (int i = 0; i < lesTaches.size(); i++) {

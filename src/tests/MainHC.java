@@ -1,18 +1,19 @@
 package tests;
 
-import java.io.File;
+import java.text.DecimalFormat;
 import java.util.List;
 
-import algorithmes.EDD;
-import algorithmes.HillClimbing;
-import algorithmes.MDD;
-import algorithmes.RND;
-import models.Interchange;
-import models.Insert;
-import models.Neighborhood;
+import algorithms.EDD;
+import algorithms.HillClimbing;
+import algorithms.MDD;
+import algorithms.RND;
 import models.Ordonnancement;
-import models.Swap;
+import neighborhood.Insert;
+import neighborhood.Interchange;
+import neighborhood.Neighborhood;
+import neighborhood.Swap;
 import utils.MyFileReader;
+import utils.MyFileWriter;
 
 public class MainHC {
 
@@ -27,94 +28,87 @@ public class MainHC {
 			
 			if (checkParameters(select, voisinage, init)) { // on verifie si les parametres sont corrects
 				
+				System.out.println("Running...");
 				List<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
 				
-				System.out.println("Resulats " + select + " " + voisinage + " " + init);
 				HillClimbing hc;
-				Neighborhood ngb = null;
-				String name = select+"_"+voisinage+"_"+init;
+				Neighborhood ngb;
 				
-				File file = new File("data/results/hc/"+name+".dat");
-				file.delete(); // on ecrase le fichier precedent
-					
-				if (init.equals("rnd")) { // si la solution initiale est RND
-					for (int n = 0; n < lesOrdonnancements.size(); n++) { // pour chaque instance
+				int size = lesOrdonnancements.size();
+				int[] evals = new int[size]; String[] devs = new String[size]; long[] times = new long[size];
+			
+				for (int n = 0; n < lesOrdonnancements.size(); n++) { // pour chaque instance
+
+					if (init.equals("rnd")) { // si la solution initiale est RND
 						RND rnd = new RND(lesOrdonnancements.get(n));
-							
 						if (voisinage.equals("insert")) { // si on a choisi l'insertion
 							ngb = new Insert();
 						}
-						
 						else if (voisinage.equals("swap")) { // si on a choisi la permutation
 							ngb = new Swap();
 						}
-							
 						else { // si on a choisi l'echange
 							ngb = new Interchange();
 						}
-							
-						hc = new HillClimbing(select, ngb, rnd, n);
-						hc.run();
+						hc = new HillClimbing(select, ngb, rnd);				
 					}
-				}
 					
-				else if (init.equals("edd")) { // si la solution initiale est EDD
-					for (int n = 0; n < lesOrdonnancements.size(); n++) {
+					else if (init.equals("edd")) { // si la solution initiale est EDD
 						EDD edd = new EDD(lesOrdonnancements.get(n));
-						
 						if (voisinage.equals("insert")) { // si on a choisi l'insertion
 							ngb = new Insert();
 						}
-							
 						else if (voisinage.equals("swap")) { // si on a choisi la permutation
 							ngb = new Swap();
 						}
-						
 						else { // si on a choisi l'echange
 							ngb = new Interchange();
 						}
-							
-						hc = new HillClimbing(select, ngb,  edd, n);
-						hc.run();
+						hc = new HillClimbing(select, ngb,  edd);
 					}
-				}
 					
-				else { // si la solution initiale est MDD
-					for (int n = 0; n < lesOrdonnancements.size(); n++) {
+					else { // si la solution initiale est MDD
 						MDD mdd = new MDD(lesOrdonnancements.get(n));
-							
 						if (voisinage.equals("insert")) { // si on a choisi l'insertion
 							ngb = new Insert();
 						}
-							
 						else if (voisinage.equals("swap")) { // si on a choisi la permutation
 							ngb = new Swap();
 						}
-							
 						else { // si on a choisi l'echange
 							ngb = new Interchange();
 						}
-							
-						hc = new HillClimbing(select, ngb,  mdd, n);
-						hc.run();
+						hc = new HillClimbing(select, ngb,  mdd);
 					}
+					
+					long totalTime = 0;
+					double totalEval = 0;
+					
+					for (int k = 0; k < 30; k++) {
+						long deb = System.currentTimeMillis();
+						Ordonnancement sol = hc.run();
+						long time = System.currentTimeMillis() - deb;
+						System.out.println(sol.eval());
+						totalTime += time;
+						totalEval += sol.eval();
+					}
+					
+					double eval = totalEval/30;
+					double bestScore = MyFileReader.bestSolution(n); // la meilleure solution connue de la nieme instance
+					double dev = (eval == 0 && bestScore == 0) ? 0 : 100 * (eval-bestScore)/bestScore; // la deviation par rapport a la meilleure solution connue
+
+					DecimalFormat df = new DecimalFormat("#.###");
+					
+					System.out.println(n + " " + eval + " " + df.format(dev) + "%" + " " + totalTime/30 + "ms");
+					
+//					double dev = sol.deviation(n);
+//					DecimalFormat df = new DecimalFormat("#.###");
+//					evals[n] = sol.eval(); devs[n] = df.format(dev); times[n] = time; // enregistrement des donnees
+				
 				}
 				
-//				try {
-//					BufferedWriter bw = new BufferedWriter(new FileWriter("data/results/hc/"+name+".plt")); // creation d'un script plt
-//					bw.write("set term png\n");
-//					bw.write("set output '"+name+".png'\n");
-//					bw.write("set title 'deviation et temps d execution de chaque ordonnancement'\n");
-//					bw.write("set xrange [0:"+lesOrdonnancements.size()+"]\n");
-//					bw.write("set yrange [0:300]\n");
-//					bw.write("set ylabel 'deviation/time'\n");
-//					bw.write("set xlabel 'instances'\n");
-//					bw.write("plot '"+name+".txt' using 1:2 with lines title 'deviation', '"+name+".txt' using 1:3 with lines title 'time'\n");
-//					bw.close();
-//				}
-//				catch (IOException e) {
-//					e.printStackTrace();
-//				}
+//				MyFileWriter.writeData("data/results/hc/"+select+"_"+voisinage+"_"+init+".dat", evals, devs, times);
+//				System.out.println("Done");
 
 			}
 			

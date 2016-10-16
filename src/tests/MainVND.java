@@ -1,39 +1,47 @@
 package tests;
 
-import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import algorithmes.EDD;
-import algorithmes.MDD;
-import algorithmes.RND;
-import algorithmes.VND;
-import models.Interchange;
-import models.Insert;
-import models.Neighborhood;
+import algorithms.EDD;
+import algorithms.MDD;
+import algorithms.RND;
+import algorithms.VND;
 import models.Ordonnancement;
-import models.Swap;
+import neighborhood.Insert;
+import neighborhood.Interchange;
+import neighborhood.Neighborhood;
+import neighborhood.Swap;
 import utils.MyFileReader;
+import utils.MyFileWriter;
 
 public class MainVND {
 	
 	public static void main(String[] args) {
 		
-		if (args.length == 6) { // on verifie qu'il y a bien 6 parametres
+		if (args.length == 5) { // on verifie qu'il y a bien 6 parametres
 			String filename = args[0];
 			int nbTaches = Integer.parseInt(args[1]);
 			String select = args[2]; // first ou best
 			String init = args[3]; // choix de la  solution initiale
 			int v = Integer.parseInt(args[4]); // choix de l'ordre des voisinages
-			int n = Integer.parseInt(args[5]); // le numero de l'ordonnancement
+//			int n = Integer.parseInt(args[5]); // le numero de l'ordonnancement
 			
 			if (checkParameters(select, init)) { // on verifie si les parametres sont corrects
 				
-				ArrayList<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
+				System.out.println("Running...");
+				List<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
 				
-				if (n <= lesOrdonnancements.size()) { // si on a choisi un ordonnancement valide
+				VND vnd;
+				
+//				int size = lesOrdonnancements.size();
+//				int[] evals = new int[size]; String[] devs = new String[size]; long[] times = new long[size];
+				
+				for (int n = 0; n < lesOrdonnancements.size(); n++) { // pour chaque instance
+//				if (n <= lesOrdonnancements.size()) { // si on a choisi un ordonnancement valide
 					
-					Ordonnancement o = lesOrdonnancements.get(n-1); // l'ordonnancement choisi
+					Ordonnancement o = lesOrdonnancements.get(n); // l'ordonnancement choisi
 					
 					List<Neighborhood> voisinages = new ArrayList<Neighborhood>(); // la liste des voisinages
 					voisinages.add(new Interchange());
@@ -48,36 +56,51 @@ public class MainVND {
 						voisinages.add(new Swap());
 					}
 					
-					String name = select+"_"+init+"_"+n;
-					
-					File file = new File("data/results/vnd/"+name+".dat");
-					file.delete(); // on ecrase le fichier precedent
-					
-					System.out.println("Resulat " + init + " " + select + " " + voisinages.toString() + " " + n);
-					
 					if (init.equals("rnd")) { // si la solution initiale est RND
 						RND rnd = new RND(o);
-						VND vnd = new VND(voisinages, select, rnd, n-1);
-						vnd.run();
+						vnd = new VND(voisinages, select, rnd);
+						
 					}
 					
 					else if (init.equals("edd")) { // si la solution initiale est EDD
 						EDD edd = new EDD(o);
-						VND vnd = new VND(voisinages, select, edd, n-1);
-						vnd.run();
+						vnd = new VND(voisinages, select, edd);
 					}
 					
-					else if (init.equals("mdd")) { // si la solution initiale est MDD
+					else { // si la solution initiale est MDD
 						MDD mdd = new MDD(o);
-						VND vnd = new VND(voisinages, select, mdd, n-1);
-						vnd.run();
+						vnd = new VND(voisinages, select, mdd);
 					}
 					
-				}
+					long totalTime = 0;
+					double totalEval = 0;
+					for (int k = 0; k < 30; k++) {
+						Ordonnancement sol = vnd.run();
+//						System.out.println(sol.eval());
+						totalTime += sol.getTime();
+						totalEval += sol.eval();
+					}
+					
+					double eval = totalEval/30;
+					double bestScore = MyFileReader.bestSolution(n); // la meilleure solution connue de la nieme instance
+					double dev = (eval == 0 && bestScore == 0) ? 0 : 100 * (eval-bestScore)/bestScore; // la deviation par rapport a la meilleure solution connue
+
+					DecimalFormat df = new DecimalFormat("#.###");
+					
+					System.out.println(n + " " + eval + " " + df.format(dev) + "%" + " " + totalTime/30 + "ms");
+					
+//					double dev = sol.deviation(n);
+//					DecimalFormat df = new DecimalFormat("#.###");
+//					System.out.println(n + " " + sol.eval() + " " + df.format(dev) + "%" + " " + sol.getTime() + "ms");
+//					evals[n] = sol.eval(); devs[n] = df.format(dev); times[n] = sol.getTime(); // enregistrement des donnees
 				
-				else {
-					System.out.println("choisir un numero dans [0..." + (lesOrdonnancements.size()-1) + "]");
 				}
+//				
+//				MyFileWriter.writeData("data/results/vnd/"+select+"_"+init+".dat", evals, devs, times);
+//				System.out.println("Done");
+//				else {
+//					System.out.println("choisir un numero dans [0..." + (lesOrdonnancements.size()-1) + "]");
+//				}
 				
 			}
 			

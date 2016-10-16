@@ -2,7 +2,7 @@ package tests;
 
 import java.util.ArrayList;
 
-import algorithmes.RND;
+import algorithms.RND;
 import models.Ordonnancement;
 import utils.MyFileReader;
 import utils.MyFileWriter;

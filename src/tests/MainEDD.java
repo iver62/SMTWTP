@@ -1,8 +1,8 @@
 package tests;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import algorithmes.EDD;
+import algorithms.EDD;
 import models.Ordonnancement;
 import utils.MyFileReader;
 import utils.MyFileWriter;
@@ -15,7 +15,7 @@ public class MainEDD {
 			String filename = args[0];
 			int nbTaches = Integer.parseInt(args[1]);
 
-			ArrayList<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
+			List<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
 			
 			int[] dataEval = new int[lesOrdonnancements.size()];
 			
