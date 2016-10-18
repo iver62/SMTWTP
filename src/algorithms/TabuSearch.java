@@ -5,6 +5,7 @@ import java.util.List;
 
 import models.Ordonnancement;
 import neighborhood.Neighborhood;
+import utils.MyFileWriter;
 
 public class TabuSearch {
 	
@@ -12,11 +13,13 @@ public class TabuSearch {
 	private String select; // strategie de selection du meilleur voisin 
 	private List<Neighborhood> voisinages; // liste des voisinages
 	private Heuristic h; // solution initiale
+	private int n;
 	
 	public TabuSearch(List<Neighborhood> voisinages, String select, Heuristic h, int n) {
 		this.voisinages = voisinages;
 		this.select = select;
 		this.h = h;
+		this.n = n;
 		tabuList = new ArrayList<Ordonnancement>();
 	}
 
@@ -29,12 +32,12 @@ public class TabuSearch {
 	}
 	
 	/**
-	 * Lance l'algorithme selon différents paramètres : la strategie de selection, la liste des voisinages et la solution initiale 
+	 * Lance l'algorithme selon diffï¿½rents paramï¿½tres : la strategie de selection, la liste des voisinages et la solution initiale 
 	 */
-	public Ordonnancement run() {
-		int k = 0, i = 0;
+	public void run() {
+		int k = 0, i = 0, j = 0;
 		Ordonnancement sol = generateInitialSolution(); // la solution initiale
-//		double bestScore = MyFileReader.bestSolution(n); // l'evaluation de la meilleure solution connue
+		double[] devs = new double[100*sol.size()]; long[] times = new long[100*sol.size()];
 		long debut = System.currentTimeMillis();
 		
 		while (k < 10*sol.size()) { // on sort de la boucle si on a effectue 1000 iterations sans amelioration
@@ -44,10 +47,11 @@ public class TabuSearch {
 			if (!tabuList.contains(cand) && cand.eval() < sol.eval()) { // s'il est meilleur que la solution courante et qu'il n'est pas dans la liste tabou
 				long time = System.currentTimeMillis()-debut;
 				sol = cand; // nouvel optimum local dans le voisinage courant
-//				double dev = 100 * (sol.eval()-bestScore) / bestScore; // la deviation par rapport a la meilleure solution connue
-				
-//				System.out.println(cand.eval());
-				sol.setTime(time);
+				System.out.println(sol.eval());
+				devs[j] = sol.deviation(n);
+				times[j] = time;
+				j++;
+//				sol.setTime(time);
 				
 				if (tabuList.size() == sol.size()) { // si la liste tabou est pleine
 					tabuList.remove(0); // on enleve le premier element
@@ -67,7 +71,8 @@ public class TabuSearch {
 			
 		}
 		
-		return sol;
+		MyFileWriter.writeData("data/results/ts/"+select+"_"+h.toString()+".dat", devs, times);
+//		return sol;
 	}
 
 }

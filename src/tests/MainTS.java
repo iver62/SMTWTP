@@ -1,6 +1,5 @@
 package tests;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,18 +13,17 @@ import neighborhood.Interchange;
 import neighborhood.Neighborhood;
 import neighborhood.Swap;
 import utils.MyFileReader;
-import utils.MyFileWriter;
 
 public class MainTS {
 
 	public static void main(String[] args) {
-		if (args.length == 5) { // on verifie qu'il y a bien 6 parametres
+		if (args.length == 6) { // on verifie qu'il y a bien 6 parametres
 			String filename = args[0];
 			int nbTaches = Integer.parseInt(args[1]);
 			String select = args[2]; // first ou best
 			String init = args[3]; // choix de la  solution initiale
 			int v = Integer.parseInt(args[4]); // choix de l'ordre des voisinages
-//			int n = Integer.parseInt(args[5]); // le numero de l'ordonnancement
+			int n = Integer.parseInt(args[5]); // le numero de l'ordonnancement
 			
 			if (checkParameters(select, init)) { // on verifie si les parametres sont corrects
 				
@@ -34,11 +32,11 @@ public class MainTS {
 				
 				TabuSearch ts;
 				
-				int size = lesOrdonnancements.size();
-				int[] evals = new int[size]; String[] devs = new String[size]; long[] times = new long[size];
+//				int size = lesOrdonnancements.size();
+//				int[] evals = new int[size]; String[] devs = new String[size]; long[] times = new long[size];
 				
-				for (int n = 0; n < lesOrdonnancements.size(); n++) { // pour chaque instance
-//				if (n <= lesOrdonnancements.size()) { // si on a choisi un ordonnancement valide
+//				for (int n = 0; n < lesOrdonnancements.size(); n++) { // pour chaque instance
+				if (n < lesOrdonnancements.size()) { // si on a choisi un ordonnancement valide
 					
 					Ordonnancement o = lesOrdonnancements.get(n); // l'ordonnancement choisi
 					
@@ -64,33 +62,34 @@ public class MainTS {
 					
 					if (init.equals("rnd")) { // si la solution initiale est RND
 						RND rnd = new RND(o);
-						ts = new TabuSearch(voisinages, select, rnd, n-1);
+						ts = new TabuSearch(voisinages, select, rnd, n);
 					}
 					
 					else if (init.equals("edd")) { // si la solution initiale est EDD
 						EDD edd = new EDD(o);
-						ts = new TabuSearch(voisinages, select, edd, n-1);
+						ts = new TabuSearch(voisinages, select, edd, n);
 					}
 					
 					else { // si la solution initiale est MDD
 						MDD mdd = new MDD(o);
-						ts = new TabuSearch(voisinages, select, mdd, n-1);
+						ts = new TabuSearch(voisinages, select, mdd, n);
 					}
 					
-					Ordonnancement sol = ts.run();
-					double dev = sol.deviation(n);
-					DecimalFormat df = new DecimalFormat("#.###");
-					evals[n] = sol.eval(); devs[n] = df.format(dev); times[n] = sol.getTime(); // enregistrement des donnees
-					System.out.println(n + " " + sol.eval() + " " + df.format(dev) + "%" + " " + sol.getTime() + "ms");
+					/*Ordonnancement sol = */ts.run();
+					System.out.println("Done");
+//					double dev = sol.deviation(n);
+//					DecimalFormat df = new DecimalFormat("#.###");
+//					evals[n] = sol.eval(); devs[n] = df.format(dev); times[n] = sol.getTime(); // enregistrement des donnees
+//					System.out.println(n + " " + sol.eval() + " " + df.format(dev) + "%" + " " + sol.getTime() + "ms");
 					
 				}
 				
-				MyFileWriter.writeData("data/results/ts/"+select+"_"+init+".dat", evals, devs, times);
-				System.out.println("Done");
+//				MyFileWriter.writeData("data/results/ts/"+select+"_"+init+".dat", evals, devs, times);
+//				System.out.println("Done");
 				
-//				else {
-//					System.out.println("choisir un numero dans [0..." + (lesOrdonnancements.size()-1) + "]");
-//				}
+				else {
+					System.out.println("choisir un numero dans [0..." + (lesOrdonnancements.size()-1) + "]");
+				}
 				
 			}
 			

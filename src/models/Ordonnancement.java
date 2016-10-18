@@ -1,14 +1,14 @@
 package models;
-import java.util.ArrayList;
+import java.util.List;
 
 import utils.MyFileReader;
 
 public class Ordonnancement {
 	
-	private ArrayList<Tache> lesTaches;
+	private List<Tache> lesTaches;
 	private long time;
 
-	public Ordonnancement(ArrayList<Tache> lesTaches) {
+	public Ordonnancement(List<Tache> lesTaches) {
 		this.lesTaches = lesTaches;
 	}
 	
@@ -62,7 +62,7 @@ public class Ordonnancement {
 		lesTaches.add(i, t2);
 	}
 
-	public ArrayList<Tache> getLesTaches() {
+	public List<Tache> getLesTaches() {
 		return lesTaches;
 	}
 	
@@ -83,7 +83,7 @@ public class Ordonnancement {
 		for (int i = 0; i < lesTaches.size(); i++) {
 			str += "tache n°" + i + ":" + lesTaches.get(i).toString() + " ";
 		}
-		str += "]";
+		str += "]\n";
 		return str;
 	}
 	

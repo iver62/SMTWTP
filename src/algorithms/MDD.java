@@ -1,6 +1,7 @@
 package algorithms;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import models.Ordonnancement;
 import models.Tache;
@@ -13,12 +14,12 @@ public class MDD extends Heuristic {
 
 	/**
 	 * Lance l'algorithme. Cet algorithme trie les taches par ordre croissant de leurs echeances modifiees
-	 * mddj := max{C + pj , dj} ou C est la somme des temps d'exucution des jobs deja ordonnances.
+	 * mddj := max{Cï¿½+ pj , dj} ou C est la somme des temps d'exucution des jobs deja ordonnances.
 	 * @return un ordonnancement
 	 */
 	public Ordonnancement run() {
-		ArrayList<Tache> list = o.getLesTaches();
-		ArrayList<Tache> sol = new ArrayList<Tache>();
+		List<Tache> list = o.getLesTaches();
+		List<Tache> sol = new ArrayList<Tache>();
 		int c = 0;
 		while (list.size() != 0) {
 			Tache tache = list.get(0);

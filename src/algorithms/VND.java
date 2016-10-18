@@ -4,17 +4,20 @@ import java.util.List;
 
 import models.Ordonnancement;
 import neighborhood.Neighborhood;
+import utils.MyFileWriter;
 
 public class VND {
 	
 	private List<Neighborhood> voisinages; // liste des voisinages
 	private String select; // strategie de selection du meilleur voisin
 	private Heuristic h; // solution initiale
+	private int n;
 	
-	public VND(List<Neighborhood> voisinages, String select, Heuristic h) {
+	public VND(List<Neighborhood> voisinages, String select, Heuristic h, int n) {
 		this.voisinages = voisinages;
 		this.select = select;
 		this.h = h;
+		this.n = n;
 	}
 	
 	public Ordonnancement generateInitialSolution() {
@@ -24,9 +27,12 @@ public class VND {
 	/**
 	 * Lance l'algorithme
 	 */
-	public Ordonnancement run() {
-		int k = 0, i = 0;
+	public void run() {
+		int k = 0, i = 0, j = 0;
+		
 		Ordonnancement sol = generateInitialSolution(); // generation de la solution initiale
+		double[] devs = new double[100*sol.size()]; long[] times = new long[100*sol.size()];
+		
 		long deb = System.currentTimeMillis();
 		
 		while (k < 10*sol.size()) { // on sort de la boucle si on a effectue 1000 iterations sans amelioration
@@ -36,8 +42,11 @@ public class VND {
 			if (cand.eval() < sol.eval()) { // s'il est meilleur que la solution courante
 				sol = cand; // nouvel optimum local dans le voisinage courant
 				long time = System.currentTimeMillis() - deb;
-				sol.setTime(time);
-//				System.out.println(cand.eval());
+				devs[j] = sol.deviation(n);
+				times[j] = time;
+				j++;
+//				sol.setTime(time);
+				System.out.println(sol.eval());
 				k = 0; // une meilleure solution a ete trouvee k est reinitialise
 				i = 0; // on revient au premier voisinage
 			}
@@ -49,7 +58,8 @@ public class VND {
 			
 		}
 		
-		return sol;
+		MyFileWriter.writeData("data/results/vnd/"+select+"_"+h.toString()+".dat", devs, times);
+//		return sol;
 	}
 
 }

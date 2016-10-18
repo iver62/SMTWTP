@@ -1,6 +1,5 @@
 package tests;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,19 +13,18 @@ import neighborhood.Interchange;
 import neighborhood.Neighborhood;
 import neighborhood.Swap;
 import utils.MyFileReader;
-import utils.MyFileWriter;
 
 public class MainVND {
 	
 	public static void main(String[] args) {
 		
-		if (args.length == 5) { // on verifie qu'il y a bien 6 parametres
+		if (args.length == 6) { // on verifie qu'il y a bien 6 parametres
 			String filename = args[0];
 			int nbTaches = Integer.parseInt(args[1]);
 			String select = args[2]; // first ou best
 			String init = args[3]; // choix de la  solution initiale
 			int v = Integer.parseInt(args[4]); // choix de l'ordre des voisinages
-//			int n = Integer.parseInt(args[5]); // le numero de l'ordonnancement
+			int n = Integer.parseInt(args[5]); // le numero de l'ordonnancement
 			
 			if (checkParameters(select, init)) { // on verifie si les parametres sont corrects
 				
@@ -38,8 +36,8 @@ public class MainVND {
 //				int size = lesOrdonnancements.size();
 //				int[] evals = new int[size]; String[] devs = new String[size]; long[] times = new long[size];
 				
-				for (int n = 0; n < lesOrdonnancements.size(); n++) { // pour chaque instance
-//				if (n <= lesOrdonnancements.size()) { // si on a choisi un ordonnancement valide
+//				for (int n = 0; n < lesOrdonnancements.size(); n++) { // pour chaque instance
+				if (n <= lesOrdonnancements.size()) { // si on a choisi un ordonnancement valide
 					
 					Ordonnancement o = lesOrdonnancements.get(n); // l'ordonnancement choisi
 					
@@ -58,49 +56,49 @@ public class MainVND {
 					
 					if (init.equals("rnd")) { // si la solution initiale est RND
 						RND rnd = new RND(o);
-						vnd = new VND(voisinages, select, rnd);
+						vnd = new VND(voisinages, select, rnd, n);
 						
 					}
 					
 					else if (init.equals("edd")) { // si la solution initiale est EDD
 						EDD edd = new EDD(o);
-						vnd = new VND(voisinages, select, edd);
+						vnd = new VND(voisinages, select, edd, n);
 					}
 					
 					else { // si la solution initiale est MDD
 						MDD mdd = new MDD(o);
-						vnd = new VND(voisinages, select, mdd);
+						vnd = new VND(voisinages, select, mdd, n);
 					}
 					
-					long totalTime = 0;
-					double totalEval = 0;
-					for (int k = 0; k < 30; k++) {
-						Ordonnancement sol = vnd.run();
+//					long totalTime = 0;
+//					double totalEval = 0;
+//					for (int k = 0; k < 30; k++) {
+						/*Ordonnancement sol = */vnd.run();
 //						System.out.println(sol.eval());
-						totalTime += sol.getTime();
-						totalEval += sol.eval();
-					}
+//						totalTime += sol.getTime();
+//						totalEval += sol.eval();
+//					}
 					
-					double eval = totalEval/30;
-					double bestScore = MyFileReader.bestSolution(n); // la meilleure solution connue de la nieme instance
-					double dev = (eval == 0 && bestScore == 0) ? 0 : 100 * (eval-bestScore)/bestScore; // la deviation par rapport a la meilleure solution connue
-
-					DecimalFormat df = new DecimalFormat("#.###");
-					
-					System.out.println(n + " " + eval + " " + df.format(dev) + "%" + " " + totalTime/30 + "ms");
+//					double eval = totalEval/30;
+//					double bestScore = MyFileReader.bestSolution(n); // la meilleure solution connue de la nieme instance
+//					double dev = (eval == 0 && bestScore == 0) ? 0 : 100 * (eval-bestScore)/bestScore; // la deviation par rapport a la meilleure solution connue
+//
+//					DecimalFormat df = new DecimalFormat("#.###");
+//					
+//					System.out.println(n + " " + eval + " " + df.format(dev) + "%" + " " + totalTime/30 + "ms");
 					
 //					double dev = sol.deviation(n);
 //					DecimalFormat df = new DecimalFormat("#.###");
 //					System.out.println(n + " " + sol.eval() + " " + df.format(dev) + "%" + " " + sol.getTime() + "ms");
 //					evals[n] = sol.eval(); devs[n] = df.format(dev); times[n] = sol.getTime(); // enregistrement des donnees
-				
+						System.out.println("Done");
 				}
 //				
 //				MyFileWriter.writeData("data/results/vnd/"+select+"_"+init+".dat", evals, devs, times);
-//				System.out.println("Done");
-//				else {
-//					System.out.println("choisir un numero dans [0..." + (lesOrdonnancements.size()-1) + "]");
-//				}
+				
+				else {
+					System.out.println("choisir un numero dans [0..." + (lesOrdonnancements.size()-1) + "]");
+				}
 				
 			}
 			
@@ -113,7 +111,7 @@ public class MainVND {
 		else {
 			System.out.println("Usage : \n\tjava -jar SMTWTP_VND.jar <filename> <nbTaches> [first,best] [rnd,edd,mdd] [1,2] {1 ... n}");
 		}
-
+		
 	}
 	
 	private static boolean checkParameters(String select, String init) {
