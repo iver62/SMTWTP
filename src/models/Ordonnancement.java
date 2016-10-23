@@ -3,7 +3,7 @@ import java.util.List;
 
 import utils.MyFileReader;
 
-public class Ordonnancement {
+public class Ordonnancement implements Comparable<Ordonnancement> {
 	
 	private List<Tache> lesTaches;
 	private long time;
@@ -81,10 +81,15 @@ public class Ordonnancement {
 	public String toString() {
 		String str = new String("Ordonnancement [lesTaches= ");
 		for (int i = 0; i < lesTaches.size(); i++) {
-			str += "tache n°" + i + ":" + lesTaches.get(i).toString() + " ";
+			str += lesTaches.get(i).getN() + " ";
 		}
 		str += "]\n";
 		return str;
+	}
+
+	@Override
+	public int compareTo(Ordonnancement o) {
+		return eval() - o.eval();
 	}
 	
 }

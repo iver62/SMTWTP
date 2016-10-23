@@ -2,14 +2,25 @@ package models;
 
 public class Tache implements Comparable<Tache> {
 	
+	private int n;
 	private int p;
 	private int w;
 	private int d;
+	
 		
-	public Tache(int p, int w, int d) {
+	public Tache(int n, int p, int w, int d) {
+		this.n = n;
 		this.p = p;
 		this.w = w;
 		this.d = d;
+	}
+
+	public int getN() {
+		return n;
+	}
+
+	public void setN(int n) {
+		this.n = n;
 	}
 
 	public int getP() {
@@ -38,9 +49,9 @@ public class Tache implements Comparable<Tache> {
 
 	@Override
 	public String toString() {
-		return "Tache [p=" + p + ", w=" + w + ", d=" + d + "]";
+		return "Tache [n=" + n + ", p=" + p + ", w=" + w + ", d=" + d + "]";
 	}
-
+	
 	public int compareTo(Tache t) {
 		return d - t.getD();
 	}

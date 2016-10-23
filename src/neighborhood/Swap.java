@@ -15,8 +15,7 @@ public class Swap extends Neighborhood {
 	
 	/**
 	 * Retourne le meilleur voisin d'un ordonnancement selon la methode des permutations. Si select = 'first' on 
-	 * retourne le premier meilleur voisin, si select = 'best', on retourne le meilleur voisin parmi
-	 * tous les voisins.
+	 * retourne le premier meilleur voisin, si select = 'best', on retourne le meilleur voisin parmi tous les voisins.
 	 * @param select : first ou best
 	 * @param o : un ordonnancement
 	 * @return le meilleur voisin
@@ -35,7 +34,7 @@ public class Swap extends Neighborhood {
 		for (int i = 0; i < n; i++) {
 			for (int j = i+1; j < n; j++) {
 				int li = listeI.get(i), lj = listeJ.get(j);
-				o.swap(li, lj); // on permute la ieme et la jieme tache
+				o.swap(li, lj); // permutation de la ieme et la jieme tache
 				if (o.eval() < e) {
 					sol = new Ordonnancement(new ArrayList<Tache>(o.getLesTaches()));
 					e = sol.eval();

@@ -81,25 +81,26 @@ public class MainHC {
 						hc = new HillClimbing(select, ngb,  mdd);
 					}
 					
-					long totalTime = 0;
-					double totalEval = 0;
+//					long totalTime = 0;
+//					double totalEval = 0;
 					
-					for (int k = 0; k < 30; k++) {
+//					for (int k = 0; k < 30; k++) {
 						long deb = System.currentTimeMillis();
 						Ordonnancement sol = hc.run();
 						long time = System.currentTimeMillis() - deb;
-						System.out.println(sol.eval());
-						totalTime += time;
-						totalEval += sol.eval();
-					}
+//						System.out.println(sol.eval());
+//						totalTime += time;
+//						totalEval += sol.eval();
+//					}
 					
-					double eval = totalEval/30;
-					double bestScore = MyFileReader.bestSolution(n); // la meilleure solution connue de la nieme instance
-					double dev = (eval == 0 && bestScore == 0) ? 0 : 100 * (eval-bestScore)/bestScore; // la deviation par rapport a la meilleure solution connue
+//					double eval = totalEval/30;
+//					double bestScore = MyFileReader.bestSolution(n); // la meilleure solution connue de la nieme instance
+//					double dev = (sol.eval() == 0 && bestScore == 0) ? 0 : 100 * (sol.eval()-bestScore)/bestScore; // la deviation par rapport a la meilleure solution connue
 
 					DecimalFormat df = new DecimalFormat("#.###");
 					
-					System.out.println(n + " " + eval + " " + df.format(dev) + "%" + " " + totalTime/30 + "ms");
+//					System.out.println(sol);
+					System.out.println(n+1 + " " + sol.eval() + " " + df.format(sol.deviation(n)) + "%" + " " + time + "ms");
 					
 //					double dev = sol.deviation(n);
 //					DecimalFormat df = new DecimalFormat("#.###");
@@ -107,8 +108,8 @@ public class MainHC {
 				
 				}
 				
-//				MyFileWriter.writeData("data/results/hc/"+select+"_"+voisinage+"_"+init+".dat", evals, devs, times);
-//				System.out.println("Done");
+				MyFileWriter.writeData("data/results/hc/"+select+"_"+voisinage+"_"+init+".dat", evals, devs, times);
+				System.out.println("Done");
 
 			}
 			

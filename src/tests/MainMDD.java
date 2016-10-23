@@ -23,7 +23,7 @@ public class MainMDD {
 				MDD mdd = new MDD(lesOrdonnancements.get(i));
 				Ordonnancement res = mdd.run();
 				dataEval[i] = res.eval();
-				System.out.println(i + " " + res.eval());
+				System.out.println(i+1 + " " + res.eval());
 			}
 			MyFileWriter.writeData("data/results/mdd.dat", dataEval);
 		}

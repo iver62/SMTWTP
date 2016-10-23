@@ -23,7 +23,7 @@ public class MainEDD {
 				EDD edd = new EDD(lesOrdonnancements.get(i));
 				Ordonnancement res = edd.run();
 				dataEval[i] = res.eval();
-				System.out.println(i + " " + res.eval());
+				System.out.println(i+1 + " " + res.eval());
 			}
 			MyFileWriter.writeData("data/results/edd.dat", dataEval);
 		}
