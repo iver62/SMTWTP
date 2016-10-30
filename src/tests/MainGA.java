@@ -15,12 +15,12 @@ public class MainGA {
 
 	public static void main(String[] args) {
 		List<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
-		GeneticAlgo ga = new GeneticAlgo(20, 1000);
-//		System.out.println(lesOrdonnancements.get(n-1));
+		GeneticAlgo ga = new GeneticAlgo(20, 2000);
 		Ordonnancement o = lesOrdonnancements.get(n-1); 
 		ga.initPopulation(o, new MDD(o));
 		System.out.println(ga.toString());
-		ga.run();
+		Ordonnancement sol = ga.run();
+		System.out.println(sol.eval() + " " + sol.deviation(n-1));
 	}
 
 }

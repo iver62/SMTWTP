@@ -101,6 +101,7 @@ public class MainHC {
 					
 //					System.out.println(sol);
 					System.out.println(n+1 + " " + sol.eval() + " " + df.format(sol.deviation(n)) + "%" + " " + time + "ms");
+					System.out.println(sol);
 					
 //					double dev = sol.deviation(n);
 //					DecimalFormat df = new DecimalFormat("#.###");

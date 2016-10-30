@@ -13,16 +13,13 @@ public class GeneticAlgo {
 	private List<Ordonnancement> pop;
 	private int populationNumber;
 	private int nbGenerations;
-	private Ordonnancement p1, p2; // les parents
-	private Ordonnancement child; // l'enfant
-	private List<Ordonnancement> offsprings;
-	private List<Ordonnancement> mutations;
+//	private List<Ordonnancement> offsprings; // liste des enfants
+//	private List<Ordonnancement> mutations; // liste des mutants
 	private int[] ranks;
 	private double[] proba; 
 	
 	public GeneticAlgo(int populationNumber, int nbGenerations) {
 		pop = new ArrayList<Ordonnancement>(populationNumber);
-//		this.ord = ord;
 		this.populationNumber = populationNumber;
 		this.nbGenerations = nbGenerations;
 		ranks = new int[populationNumber];
@@ -30,38 +27,38 @@ public class GeneticAlgo {
 	}
 
 	public void initPopulation(Ordonnancement ord, Heuristic h) {
-		Ordonnancement o = h.run();
+		Ordonnancement o = h.run();		
 		Random r = new Random();
+
 		for (int n = 0; n < populationNumber; n++) {
 			Ordonnancement c = new Ordonnancement(new ArrayList<>(o.getLesTaches()));
 			int i = r.nextInt(o.size()), j = r.nextInt(o.size()); 
 			c.swap(i, j);
-//			System.out.println("permute " + i + " et " + j);
-//			System.out.println(c);
 			pop.add(c);
 		}
-//		Collections.sort(pop);
+		
 	}
 	
-	public void selection() {
-		Collections.sort(pop);
-		System.out.println(toString());
+	/**
+	 * Selectionne 2 parents tel que plus un ordonnancement est meilleur, plus il a de chances d'etre selectionne
+	 * @return un tableau contenant 2 ordonnancements
+	 */
+	public Ordonnancement[] select() {
 		rank();
-		double r1 = Math.random(), r2 = Math.random();
-		int i = 0, j = 0;
-		while (proba[i] < r1) {
-			i++;
-		}
-		while (proba[j] < r2) {
-			j++;
-		}
-		p1 = pop.get(i);
-		p2 = pop.get(j);
-		if (p1.equals(p2)) {
-			j = (j+1 == populationNumber) ? j-- : j++;
-		}
-//		System.out.println(p1 + "" + i + " " + p1.eval() + " " + r1);
-//		System.out.println(p2 + "" + j + " " + p2.eval() + " " + r2);
+		int i, j;
+		
+		do {
+			i = 0; j = 0;
+			double r1 = Math.random(), r2 = Math.random();
+			while (proba[i] < r1) {
+				i++;
+			}
+			while (proba[j] < r2) {
+				j++;
+			}
+		} while (i == j);
+
+		return new Ordonnancement[] {pop.get(i), pop.get(j)};
 	}
 	
 	private void rank() {
@@ -69,7 +66,7 @@ public class GeneticAlgo {
 		ranks[0] = r;
 		int sumRanks = r;
 		for (int i = 1; i < populationNumber; i++) {
-			--r;
+			r--;
 			if (pop.get(i).eval() == pop.get(i-1).eval()) {
 				ranks[i] = ranks[i-1];
 			}
@@ -78,27 +75,39 @@ public class GeneticAlgo {
 			}
 			sumRanks += ranks[i];
 		}
-//		System.out.println(sumRanks);
-//		printTable(ranks);
 		
 		double sumProba = 0;
 		for (int i = 0; i < populationNumber; i++) {
 			proba[i] = (double)ranks[i] / sumRanks + sumProba;
 			sumProba = proba[i];
 		}
-//		printTable(proba);
+		
 	}
 	
-	public void replace() {
-		if (child.eval() < pop.get(populationNumber-1).eval()) {
-			pop.remove(populationNumber-1);
-			pop.add(child);
+	public void replace(List<Ordonnancement> offsprings, List<Ordonnancement> mutations) {
+		
+		for (Ordonnancement off : offsprings) {
+			Ordonnancement worst = pop.get(populationNumber-1); 
+			if (off.eval() < worst.eval()) {
+				pop.remove(worst);
+				pop.add(off);
+				Collections.sort(pop);
+			}
 		}
+		
+		for (Ordonnancement mut : mutations) {
+			Ordonnancement worst = pop.get(populationNumber-1); 
+			if (mut.eval() < worst.eval()) {
+				pop.remove(worst);
+				pop.add(mut);
+				Collections.sort(pop);
+			}
+		}
+		
 	}
 	
-	public void mutation(Ordonnancement p) {
-		mutations = new ArrayList<Ordonnancement>();
-		Ordonnancement mutated = new Ordonnancement(p.getLesTaches());
+	public Ordonnancement mutation(Ordonnancement p) {
+		Ordonnancement mutated = new Ordonnancement(new ArrayList<>(p.getLesTaches()));
 		Random r = new Random();
 		int i = 0, j = 0;
 		while (i == j) {
@@ -106,68 +115,98 @@ public class GeneticAlgo {
 			j = r.nextInt(p.size());
 		}
 		mutated.swap(i, j);
-		mutations.add(mutated);
+		return mutated;
 	}
 	
-	public void crossover(Ordonnancement p1, Ordonnancement p2) {
-		offsprings = new ArrayList<Ordonnancement>();
-		Random r = new Random();
-		int debSeq = r.nextInt(p1.size()/2);
-		int finSeq = debSeq + p1.size()/2;
-		List<Tache> lesTaches = new ArrayList<Tache>();
+	public Ordonnancement[] crossover(Ordonnancement p1, Ordonnancement p2) {
+		List<Integer> alea = randomPos(p1.size()); // liste de positions (entre 0 et nombreDeTaches) choisies aleatoirement
 		
-		List<Tache> p1Tasks = new ArrayList<Tache>();
-		for (int i = debSeq; i < finSeq; i++) {
-			Tache t = p1.getLesTaches().get(i);
-			p1Tasks.add(t);
-		}
+		List<Integer> remainingPos1 = new ArrayList<Integer>(); // les positions des taches manquantes du 1er parent
+		List<Integer> remainingPos2 = new ArrayList<Integer>(); // les positions des taches manquantes du 2eme parent
 		
-		List<Tache> p2Tasks = new ArrayList<Tache>();
-		for (int i = 0; i < p2.size(); i++) {
-			Tache t = p2.getLesTaches().get(i);
-			if (!p1Tasks.contains(t)) {
-				p2Tasks.add(t);
+		List<Tache> remainingJobs1 = new ArrayList<Tache>(); // les taches manquantes du 1er parent
+		List<Tache> remainingJobs2 = new ArrayList<Tache>(); // les taches manquantes du 2eme parent
+		
+		List<Tache> l1 = new ArrayList<Tache>(p1.size()); // la liste des taches du 1er enfant
+		List<Tache> l2 = new ArrayList<Tache>(p1.size()); // la liste des taches du 2eme enfant
+		
+		for (int i = 0; i < p1.size(); i++) { // liste des taches manquantes du 1er parent
+			if (!alea.contains(i)) {
+				remainingJobs1.add(p1.get(i));
 			}
 		}
-//		Collections.shuffle(p2Tasks);
 		
+		for (int i = 0; i < p2.size(); i++) { // positions des taches manquantes du 1er parent dans le 2eme parent
+			if (remainingJobs1.contains(p2.get(i))) {
+				remainingPos1.add(i);
+			}
+		}
+		
+		for (int i = 0; i < p2.size(); i++) { // liste des taches manquantes du 2eme parent
+			if (!alea.contains(i)) {
+				remainingJobs2.add(p2.get(i));
+			}
+		}
+		
+		for (int i = 0; i < p1.size(); i++) { // positions des taches manquantes du 2eme parent dans le 1er parent
+			if (remainingJobs2.contains(p2.get(i))) {
+				remainingPos2.add(i);
+			}
+		}
+				
 		int cpt1 = 0, cpt2 = 0;
 		for (int i = 0; i < p1.size(); i++) {
-			if (i >= debSeq && i < finSeq) {
-				lesTaches.add(i, p1Tasks.get(cpt1++));
+			if (alea.contains(i)) {
+				l1.add(p1.get(i));
+				l2.add(p2.get(i));
 			}
 			else {
-				lesTaches.add(i, p2Tasks.get(cpt2++));
+				l1.add(p2.get(remainingPos1.get(cpt1++)));
+				l2.add(p2.get(remainingPos2.get(cpt2++)));
 			}
 		}
+
+		return new Ordonnancement[] {new Ordonnancement(l1), new Ordonnancement(l2)};
+//		o1 = new Ordonnancement(l1);
+//		System.out.println(o1 + " " + o1.eval());
+//		o2 = new Ordonnancement(l2);
+//		System.out.println(o2 + " " + o2.eval());
 		
-//		int i = 0;
-//		Tache t;
-//		for (i = 0; i < debSeq; i++) {
-//			t = p2Tasks.get(i);
-//			lesTaches.add(i, t);
-//		}
-//		for (i = finSeq; i < p1.size(); i++) {
-//			t = p2Tasks.get(i);
-//			lesTaches.add(i, t);
-//		}
-		offsprings.add(new Ordonnancement(lesTaches));
 	}
 	
+	/**
+	 * Lance l'algorithme
+	 * @return le meilleur ordonnancement trouve
+	 */
 	public Ordonnancement run() {
-		for (int k = 0; k < nbGenerations; k++) {
-			System.out.println(k);
-			for (int i = 0; i < populationNumber/2; i++) {
-				selection(); // selection de 2 parents
-				crossover(p1, p2); // reproduction
+		List<Ordonnancement> offsprings = new ArrayList<Ordonnancement>(); // liste des enfants
+		List<Ordonnancement> mutations = new ArrayList<Ordonnancement>(); // liste des mutants
+		for (int k = 0; k < nbGenerations; k++) { // pour chaque generation
+			offsprings.clear(); // reinitialisation de la liste des offsprings
+			mutations.clear(); // reinitialisation de la liste des mutants
+			System.out.println("generation " + k);
+			Collections.sort(pop); // tri de la population dans l'ordre croissant, les meilleurs elements sont en debut de liste
+			System.out.println("population triee " + toString());
+			for (int i = 0; i < populationNumber/2; i++) { // a chaque tour de boucle creation de 2 offsprings
+				Ordonnancement[] parents = select(); // selection de 2 parents
+				Ordonnancement[] children = crossover(parents[0], parents[1]); // reproduction		
+				offsprings.add(children[0]);
+				offsprings.add(children[1]);
 			}
 			for (int i = 0; i < populationNumber; i++) {
-				selection(); // selection de 2 parents
-				mutation(p1); // reproduction
+				Ordonnancement[] parents = select(); // selection de 1 parent
+				Ordonnancement m = mutation(parents[0]); // mutation
+				mutations.add(m);
 			}
-			replace();
+//			for (Ordonnancement o : offsprings) {
+//				System.out.print(o.eval() + " ");
+//			}
+//			for (Ordonnancement o : mutations) {
+//				System.out.print(o.eval() + " ");
+//			}
+			replace(offsprings, mutations); // parmi la population courante, les offsprings et les mutants on selectionne les meilleurs
 		}
-		System.out.println(pop.get(0).toString());
+//		System.out.println(pop.get(0).toString());
 		return pop.get(0);
 	}
 
@@ -192,6 +231,15 @@ public class GeneticAlgo {
 			str += pop.get(i).eval() + " ";
 		}
 		return str;
+	}
+	
+	private List<Integer> randomPos(int n) {
+		List<Integer> alea = new ArrayList<Integer>();
+		for (int i = 0; i < n; i++) {
+			alea.add(i);
+		}
+		Collections.shuffle(alea);
+		return alea.subList(0, n/2);
 	}
 	
 }

@@ -61,11 +61,32 @@ public class Ordonnancement implements Comparable<Ordonnancement> {
 		lesTaches.remove(i);
 		lesTaches.add(i, t2);
 	}
+	
+	/**
+	 * Ajoute une tache t a l'indice i 
+	 * @param i l'indice auquel la tache est ajoutee 
+	 * @param t la tache a ajouter
+	 */
+	public void add(int i, Tache t) {
+		lesTaches.add(i, t);
+	}
 
 	public List<Tache> getLesTaches() {
 		return lesTaches;
 	}
 	
+	/**
+	 * Retourne la tache a l'indice i
+	 * @param i l'indice de la tache
+	 * @return la tache a l'indice i
+	 */
+	public Tache get(int i) {
+		return lesTaches.get(i);
+	}
+	
+	/**
+	 * @return le nombre de taches
+	 */
 	public int size() {
 		return lesTaches.size();
 	}
