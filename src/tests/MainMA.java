@@ -21,7 +21,6 @@ public class MainMA {
 		System.out.println(ma.toString());
 		Ordonnancement sol = ma.run();
 		System.out.println(sol.eval() + " " + sol.deviation(n-1));
-
 	}
 
 }
