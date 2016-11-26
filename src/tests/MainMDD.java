@@ -8,9 +8,6 @@ import utils.MyFileReader;
 import utils.MyFileWriter;
 
 public class MainMDD {
-	
-//	public static String filename = "data/wt100.txt";
-//	public static int nbTaches = 100;
 
 	public static void main(String[] args) {
 		
@@ -28,7 +25,7 @@ public class MainMDD {
 				dataEval[i] = res.eval();
 				System.out.println(i+1 + " " + res.eval());
 			}
-			MyFileWriter.writeData("data/results/mdd.dat", dataEval);
+			MyFileWriter.writeData("data/results/mdd.dat", dataEval); // enregistrement de l'evaluation de chaque instance
 		}
 		
 		else {

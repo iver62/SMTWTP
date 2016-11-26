@@ -35,8 +35,8 @@ public class EvolutionaryAlgorithm {
 	}
 	
 	/**
-	 * Selectionne 2 parents tel que plus un ordonnancement est meilleur, plus il a de chances d'etre selectionne
-	 * @return un tableau contenant 2 ordonnancements
+	 * Selectionne 2 parents tel que plus une instance est meilleure, plus elle a de chances d'etre selectionnee
+	 * @return un tableau contenant 2 instances
 	 */
 	public Instance[] select() {
 		rank();

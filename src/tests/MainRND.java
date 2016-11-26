@@ -10,8 +10,6 @@ import utils.MyFileWriter;
 public class MainRND {
 
 	public static int nbRuns = 30;
-//	public static String filename = "data/wt100.txt";
-//	public static int nbTaches = 100;
 	
 	public static void main(String[] args) {
 		
@@ -21,7 +19,7 @@ public class MainRND {
 			
 			ArrayList<Instance> lesInstances = MyFileReader.load(filename, nbTaches);
 			
-			int[] dataEval = new int[lesInstances.size()]; // tableau ou seront stockees les evaluations de chaque instance
+			int[] dataEval = new int[lesInstances.size()]; // tableau ou seront stockees les evaluations moyennes de chaque instance
 			
 			for (int i = 0; i < lesInstances.size(); i++) {
 				
@@ -36,7 +34,7 @@ public class MainRND {
 				System.out.println(i+1 + " " + dataEval[i]);
 				
 			}
-			MyFileWriter.writeData("data/results/rnd.dat", dataEval);
+			MyFileWriter.writeData("data/results/rnd.dat", dataEval); // enregistrement de l'evaluation moyenne de chaque instance
 		}
 		
 		else {

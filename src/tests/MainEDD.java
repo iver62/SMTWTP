@@ -9,9 +9,6 @@ import utils.MyFileWriter;
 
 public class MainEDD {
 	
-//	public static String filename = "data/wt100.txt";
-//	public static int nbTaches = 100;
-	
 	public static void main(String[] args) {
 		
 		if (args.length == 2) {
@@ -28,7 +25,7 @@ public class MainEDD {
 				dataEval[i] = res.eval();
 				System.out.println(i+1 + " " + res.eval());
 			}
-			MyFileWriter.writeData("data/results/edd.dat", dataEval);
+			MyFileWriter.writeData("data/results/edd.dat", dataEval); // enregistrement de l'evaluation de chaque instance
 		}
 		
 		else {

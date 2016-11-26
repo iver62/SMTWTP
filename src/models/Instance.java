@@ -6,6 +6,7 @@ import utils.MyFileReader;
 public class Instance implements Comparable<Instance> {
 	
 	private List<Tache> lesTaches;
+	private long time;
 
 	public Instance(List<Tache> lesTaches) {
 		this.lesTaches = lesTaches;
@@ -88,6 +89,14 @@ public class Instance implements Comparable<Instance> {
 	 */
 	public int size() {
 		return lesTaches.size();
+	}
+
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
 	}
 
 	public String toString() {

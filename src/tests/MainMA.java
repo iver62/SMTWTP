@@ -11,7 +11,7 @@ public class MainMA {
 	
 	public static String filename = "data/wt100.txt";
 	public static int nbTaches = 100;
-	public static int n = 1;
+	public static int n = 71;
 
 	public static void main(String[] args) {
 		List<Instance> lesInstances = MyFileReader.load(filename, nbTaches);

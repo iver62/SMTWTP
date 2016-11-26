@@ -20,11 +20,6 @@ import utils.Strategie;
 public class MainHC {
 
 	public static int nbRuns = 30;
-//	public static String filename = "data/wt100.txt";
-//	public static int nbTaches = 100;
-//	public static Strategie str = Strategie.BEST_IMPROVEMENT;
-//	public static Neighborhood ngb = new Insert();
-//	public static Heuristic h = new MDD();
 			
 	public static void main(String[] args) {
 		
@@ -51,7 +46,7 @@ public class MainHC {
 				Instance sol = null;
 				Instance inst = lesInstances.get(n);
 				
-				for (int k = 0; k < nbRuns; k++) {
+				for (int k = 0; k < nbRuns; k++) { // 30 runs differents
 					long deb = System.currentTimeMillis();
 					sol = hc.run(inst);
 					long time = System.currentTimeMillis() - deb;
@@ -68,7 +63,7 @@ public class MainHC {
 
 				System.out.println(n+1 + " " + eval + " " + df.format(dev) + "%" + " " + time + "ms");
 
-				devs[n] = df.format(dev); times[n] = time; // enregistrement de la deviation et du temps de calcul
+				devs[n] = df.format(dev); times[n] = time; // enregistrement de la deviation et du temps de calcul moyens
 
 			}
 				
@@ -78,7 +73,7 @@ public class MainHC {
 		}
 		
 		else {
-			System.out.println("Usage : \n\tjava -jar SMTWTP_HillClimbing.jar <filename> <nbTaches> [first,best] [insert,swap,interchange] [rnd,edd,mdd]");
+			System.out.println("Usage : \n\tjava -jar SMTWTP_HC.jar <filename> <nbTaches> {first,best} {insert,swap,interchange} {rnd,edd,mdd}");
 		}
 		
 	}
@@ -92,7 +87,7 @@ public class MainHC {
 		case "mdd":
 			return new MDD();
 		default:
-			System.out.println("Erreur solution initiale incorrecte, choisir [rnd,edd,mdd]");
+			System.out.println("Erreur solution initiale incorrecte, choisir {rnd,edd,mdd}");
 			System.exit(0);
 			break;
 		}
@@ -108,7 +103,7 @@ public class MainHC {
 		case "interchange":
 			return new Interchange();
 		default:
-			System.out.println("Erreur voisinage incorrect, choisir [insert,swap,interchange]");
+			System.out.println("Erreur voisinage incorrect, choisir {insert,swap,interchange}");
 			System.exit(0);
 			break;
 		}
@@ -122,7 +117,7 @@ public class MainHC {
 		case "best":
 			return Strategie.BEST_IMPROVEMENT;
 		default:
-			System.out.println("Erreur strategie incorrect, choisir [first,best]");
+			System.out.println("Erreur strategie incorrecte, choisir {first,best}");
 			System.exit(0);
 			break;
 		}
