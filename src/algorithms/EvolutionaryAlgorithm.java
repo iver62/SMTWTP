@@ -9,9 +9,9 @@ import models.Instance;
 
 public class EvolutionaryAlgorithm {
 	
-	protected List<Instance> pop;
-	protected int populationNumber;
-	protected int nbGenerations;
+	protected List<Instance> pop; // la population est une liste d'instances 
+	protected int populationNumber; // nombre d'instances dans la population
+	protected int nbGenerations; // nombre de generations
 	protected int[] ranks;
 	protected double[] proba;
 	
@@ -23,14 +23,20 @@ public class EvolutionaryAlgorithm {
 		proba = new double[populationNumber];
 	}
 	
+	/**
+	 * Initialise la population. D'abord une instance est creee avec une heuristique, puis a partir de cette instance
+	 * x nouveaux individus sont crees en permutant 2 taches.  
+	 * @param inst l'instance a partir de laquelle la population est creee
+	 * @param h l'heuristique a partir de laquelle la population est initialisee
+	 */
 	public void initPopulation(Instance inst, Heuristic h) {
-		Instance o = h.run(inst);		
+		Instance p = h.run(inst);		
 		Random r = new Random();
-		for (int n = 0; n < populationNumber; n++) {
-			Instance c = new Instance(new ArrayList<>(o.getLesTaches()));
-			int i = r.nextInt(o.size()), j = r.nextInt(o.size()); 
-			c.swap(i, j);
-			pop.add(c);
+		for (int n = 0; n < populationNumber; n++) { // creation de x nouveaux individus
+			Instance nw = new Instance(new ArrayList<>(p.getLesTaches()));
+			int i = r.nextInt(p.size()), j = r.nextInt(p.size()); 
+			nw.swap(i, j); // permutation de 2 taches au hasard
+			pop.add(nw); // ajout de l'individu a la population
 		}
 	}
 	

@@ -61,6 +61,10 @@ public class MemeticAlgo extends EvolutionaryAlgorithm {
 		}
 	}
 	
+	/**
+	 * Lance l'algorithme mimetique
+	 * @return la meilleure instance trouvee
+	 */
 	public Instance run() {
 		List<Instance> offsprings = new ArrayList<Instance>();
 		for (int k = 0; k < nbGenerations; k++) { // pour chaque generation

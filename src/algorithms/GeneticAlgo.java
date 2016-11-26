@@ -87,8 +87,8 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 	}
 	
 	/**
-	 * Lance l'algorithme
-	 * @return le meilleur ordonnancement trouve
+	 * Lance l'algorithme genetique
+	 * @return la meilleure instance trouvee
 	 */
 	public Instance run() {
 		List<Instance> offsprings = new ArrayList<Instance>(); // liste des enfants
