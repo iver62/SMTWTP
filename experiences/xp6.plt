@@ -1,4 +1,3 @@
-set output "C:/Users/Pierrick/workspace/SMTWTP/experiences/xp6.png"
 set title "comparaison hc et vnd first mdd"
 set ylabel "temps (ms)"
 set xlabel "Instances"

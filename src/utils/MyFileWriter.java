@@ -46,7 +46,7 @@ public class MyFileWriter {
 		}
 	}
 	
-	public static void writeData(String filename, double[] devs, long[] times) {
+	public static void writeData(String filename, String[] devs, long[] times) {
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
 			for (int i = 0; i < devs.length; i++) {

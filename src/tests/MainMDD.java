@@ -3,11 +3,14 @@ package tests;
 import java.util.ArrayList;
 
 import algorithms.MDD;
-import models.Ordonnancement;
+import models.Instance;
 import utils.MyFileReader;
 import utils.MyFileWriter;
 
 public class MainMDD {
+	
+//	public static String filename = "data/wt100.txt";
+//	public static int nbTaches = 100;
 
 	public static void main(String[] args) {
 		
@@ -15,13 +18,13 @@ public class MainMDD {
 			String filename = args[0];
 			int nbTaches = Integer.parseInt(args[1]);
 			
-			ArrayList<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
+			ArrayList<Instance> lesInstances = MyFileReader.load(filename, nbTaches);
 			
-			int[] dataEval = new int[lesOrdonnancements.size()];
+			int[] dataEval = new int[lesInstances.size()]; // tableau ou seront stockees les evaluations de chaque instance
 
-			for (int i = 0; i < lesOrdonnancements.size(); i++) {
-				MDD mdd = new MDD(lesOrdonnancements.get(i));
-				Ordonnancement res = mdd.run();
+			for (int i = 0; i < lesInstances.size(); i++) {
+				MDD mdd = new MDD();
+				Instance res = mdd.run(lesInstances.get(i));
 				dataEval[i] = res.eval();
 				System.out.println(i+1 + " " + res.eval());
 			}

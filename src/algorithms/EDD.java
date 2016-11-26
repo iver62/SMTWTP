@@ -2,26 +2,22 @@ package algorithms;
 
 import java.util.Collections;
 
-import models.Ordonnancement;
+import models.Instance;
 
 public class EDD extends Heuristic {
-		
-	public EDD(Ordonnancement o) {
-		super(o);
-	}
 
 	/**
 	 * Lance l'algorithme. Cet algorithme trie les taches par ordre croissant.
-	 * @return un ordonnancement
+	 * @return une instance
 	 */
-	public Ordonnancement run() {
-		Collections.sort(o.getLesTaches());
-		return o;
+	public Instance run(Instance i) {
+		Collections.sort(i.getLesTaches());
+		return i;
 	}
 	
 	@Override
 	public String toString() {
-		return "edd";
+		return "EDD";
 	}
 
 }

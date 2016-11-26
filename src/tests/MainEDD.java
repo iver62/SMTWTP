@@ -3,11 +3,14 @@ package tests;
 import java.util.List;
 
 import algorithms.EDD;
-import models.Ordonnancement;
+import models.Instance;
 import utils.MyFileReader;
 import utils.MyFileWriter;
 
 public class MainEDD {
+	
+//	public static String filename = "data/wt100.txt";
+//	public static int nbTaches = 100;
 	
 	public static void main(String[] args) {
 		
@@ -15,13 +18,13 @@ public class MainEDD {
 			String filename = args[0];
 			int nbTaches = Integer.parseInt(args[1]);
 
-			List<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
+			List<Instance> lesInstances = MyFileReader.load(filename, nbTaches); // tableau ou seront stockees les evaluations de chaque instance
 			
-			int[] dataEval = new int[lesOrdonnancements.size()];
+			int[] dataEval = new int[lesInstances.size()];
 			
-			for (int i = 0; i < lesOrdonnancements.size(); i++) {
-				EDD edd = new EDD(lesOrdonnancements.get(i));
-				Ordonnancement res = edd.run();
+			for (int i = 0; i < lesInstances.size(); i++) {
+				EDD edd = new EDD();
+				Instance res = edd.run(lesInstances.get(i));
 				dataEval[i] = res.eval();
 				System.out.println(i+1 + " " + res.eval());
 			}

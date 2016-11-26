@@ -4,130 +4,129 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import algorithms.EDD;
+import algorithms.Heuristic;
 import algorithms.HillClimbing;
 import algorithms.MDD;
 import algorithms.RND;
-import models.Ordonnancement;
+import models.Instance;
 import neighborhood.Insert;
 import neighborhood.Interchange;
 import neighborhood.Neighborhood;
 import neighborhood.Swap;
 import utils.MyFileReader;
 import utils.MyFileWriter;
+import utils.Strategie;
 
 public class MainHC {
 
+	public static int nbRuns = 30;
+//	public static String filename = "data/wt100.txt";
+//	public static int nbTaches = 100;
+//	public static Strategie str = Strategie.BEST_IMPROVEMENT;
+//	public static Neighborhood ngb = new Insert();
+//	public static Heuristic h = new MDD();
+			
 	public static void main(String[] args) {
 		
-		if (args.length == 5) { // on verife qu'il y a bien 6 parametres
+		if (args.length == 5) { // on verifie qu'il y a bien 5 parametres
+
 			String filename = args[0]; // nom du fichier
-			int nbTaches = Integer.parseInt(args[1]); // nombre de taches par instance
-			String select = args[2]; // first ou best
-			String voisinage = args[3]; // insert, swap ou exchange
-			String init = args[4]; // choix de la solution initiale
-			
-			if (checkParameters(select, voisinage, init)) { // on verifie si les parametres sont corrects
-				
-				System.out.println("Running...");
-				List<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
-				
-				HillClimbing hc;
-				Neighborhood ngb;
-				
-				int size = lesOrdonnancements.size();
-				int[] evals = new int[size]; String[] devs = new String[size]; long[] times = new long[size];
-			
-				for (int n = 0; n < lesOrdonnancements.size(); n++) { // pour chaque instance
+			int nbTaches = Integer.parseInt(args[1]); // nombre de taches par instance			
+			Strategie str = getStrategie(args[2]); // strategie de selection du meilleur voisin			
+			Neighborhood ngb = getVoisinage(args[3]); // choix du voisinage	
+			Heuristic h = getHeuristic(args[4]); // choix de la solution initiale
 
-					if (init.equals("rnd")) { // si la solution initiale est RND
-						RND rnd = new RND(lesOrdonnancements.get(n));
-						if (voisinage.equals("insert")) { // si on a choisi l'insertion
-							ngb = new Insert();
-						}
-						else if (voisinage.equals("swap")) { // si on a choisi la permutation
-							ngb = new Swap();
-						}
-						else { // si on a choisi l'echange
-							ngb = new Interchange();
-						}
-						hc = new HillClimbing(select, ngb, rnd);				
-					}
-					
-					else if (init.equals("edd")) { // si la solution initiale est EDD
-						EDD edd = new EDD(lesOrdonnancements.get(n));
-						if (voisinage.equals("insert")) { // si on a choisi l'insertion
-							ngb = new Insert();
-						}
-						else if (voisinage.equals("swap")) { // si on a choisi la permutation
-							ngb = new Swap();
-						}
-						else { // si on a choisi l'echange
-							ngb = new Interchange();
-						}
-						hc = new HillClimbing(select, ngb,  edd);
-					}
-					
-					else { // si la solution initiale est MDD
-						MDD mdd = new MDD(lesOrdonnancements.get(n));
-						if (voisinage.equals("insert")) { // si on a choisi l'insertion
-							ngb = new Insert();
-						}
-						else if (voisinage.equals("swap")) { // si on a choisi la permutation
-							ngb = new Swap();
-						}
-						else { // si on a choisi l'echange
-							ngb = new Interchange();
-						}
-						hc = new HillClimbing(select, ngb,  mdd);
-					}
-					
-//					long totalTime = 0;
-//					double totalEval = 0;
-					
-//					for (int k = 0; k < 30; k++) {
-						long deb = System.currentTimeMillis();
-						Ordonnancement sol = hc.run();
-						long time = System.currentTimeMillis() - deb;
-//						System.out.println(sol.eval());
-//						totalTime += time;
-//						totalEval += sol.eval();
-//					}
-					
-//					double eval = totalEval/30;
-//					double bestScore = MyFileReader.bestSolution(n); // la meilleure solution connue de la nieme instance
-//					double dev = (sol.eval() == 0 && bestScore == 0) ? 0 : 100 * (sol.eval()-bestScore)/bestScore; // la deviation par rapport a la meilleure solution connue
+			System.out.println("Running...");
+			List<Instance> lesInstances = MyFileReader.load(filename, nbTaches);	
+			HillClimbing hc = new HillClimbing(str, ngb, h);
 
-					DecimalFormat df = new DecimalFormat("#.###");
-					
-//					System.out.println(sol);
-					System.out.println(n+1 + " " + sol.eval() + " " + df.format(sol.deviation(n)) + "%" + " " + time + "ms");
-					System.out.println(sol);
-					
-//					double dev = sol.deviation(n);
-//					DecimalFormat df = new DecimalFormat("#.###");
-//					evals[n] = sol.eval(); devs[n] = df.format(dev); times[n] = time; // enregistrement des donnees
+			int size = lesInstances.size();
+			String[] devs = new String[size]; long[] times = new long[size]; // les tableaux ou les donnees seront enregistrees
+
+			for (int n = 0; n < lesInstances.size(); n++) { // pour chaque instance
+
+				long totalTime = 0;
+				double totalEval = 0;
+
+				Instance sol = null;
+				Instance inst = lesInstances.get(n);
 				
+				for (int k = 0; k < nbRuns; k++) {
+					long deb = System.currentTimeMillis();
+					sol = hc.run(inst);
+					long time = System.currentTimeMillis() - deb;
+					totalTime += time;
+					totalEval += sol.eval();
 				}
-				
-				MyFileWriter.writeData("data/results/hc/"+select+"_"+voisinage+"_"+init+".dat", evals, devs, times);
-				System.out.println("Done");
+
+				double eval = totalEval/nbRuns;
+				long time = totalTime/nbRuns;
+				double bestScore = MyFileReader.bestSolution(n); // la meilleure solution connue de la nieme instance
+				double dev = (eval == 0 && bestScore == 0) ? 0 : 100 * (eval-bestScore)/bestScore; // la deviation par rapport a la meilleure solution connue
+
+				DecimalFormat df = new DecimalFormat("#.###");
+
+				System.out.println(n+1 + " " + eval + " " + df.format(dev) + "%" + " " + time + "ms");
+
+				devs[n] = df.format(dev); times[n] = time; // enregistrement de la deviation et du temps de calcul
 
 			}
-			
-			else {
-				System.out.println("Usage : \n\tjava -jar SMTWTP_HillClimbing.jar <filename> <nbTaches> [first,best] [insert,swap,interchange] [rnd,edd,mdd]");
-			}
+				
+			MyFileWriter.writeData("data/results/hc/"+str+"_"+ngb+"_"+h+".dat", devs, times);
+			System.out.println("Done");
+
 		}
 		
 		else {
 			System.out.println("Usage : \n\tjava -jar SMTWTP_HillClimbing.jar <filename> <nbTaches> [first,best] [insert,swap,interchange] [rnd,edd,mdd]");
 		}
+		
+	}
+	
+	private static Heuristic getHeuristic(String arg) {
+		switch (arg) {
+		case "rnd":
+			return new RND();
+		case "edd":
+			return new EDD();
+		case "mdd":
+			return new MDD();
+		default:
+			System.out.println("Erreur solution initiale incorrecte, choisir [rnd,edd,mdd]");
+			System.exit(0);
+			break;
+		}
+		return null;
 	}
 
-	private static boolean checkParameters(String select, String voisinage, String init) {
-		return (select.equals("first") || select.equals("best")) && 
-				(voisinage.equals("insert") || voisinage.equals("swap") || voisinage.equals("interchange")) && 
-				(init.equals("rnd") || init.equals("edd") || init.equals("mdd"));
+	private static Neighborhood getVoisinage(String arg) {
+		switch (arg) {
+		case "insert":
+			return new Insert();
+		case "swap":
+			return new Swap();
+		case "interchange":
+			return new Interchange();
+		default:
+			System.out.println("Erreur voisinage incorrect, choisir [insert,swap,interchange]");
+			System.exit(0);
+			break;
+		}
+		return null;
+	}
+
+	private static Strategie getStrategie(String arg) {
+		switch (arg) {
+		case "first":
+			return Strategie.FIRST_IMPROVEMENT;
+		case "best":
+			return Strategie.BEST_IMPROVEMENT;
+		default:
+			System.out.println("Erreur strategie incorrect, choisir [first,best]");
+			System.exit(0);
+			break;
+		}
+		return null;
 	}
 
 }

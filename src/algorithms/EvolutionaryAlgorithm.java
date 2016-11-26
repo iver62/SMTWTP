@@ -5,29 +5,29 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import models.Ordonnancement;
+import models.Instance;
 
 public class EvolutionaryAlgorithm {
 	
-	protected List<Ordonnancement> pop;
+	protected List<Instance> pop;
 	protected int populationNumber;
 	protected int nbGenerations;
 	protected int[] ranks;
 	protected double[] proba;
 	
 	public EvolutionaryAlgorithm(int populationNumber, int nbGenerations) {
-		pop = new ArrayList<Ordonnancement>(populationNumber);
+		pop = new ArrayList<Instance>(populationNumber);
 		this.populationNumber = populationNumber;
 		this.nbGenerations = nbGenerations;
 		ranks = new int[populationNumber];
 		proba = new double[populationNumber];
 	}
 	
-	public void initPopulation(Ordonnancement ord, Heuristic h) {
-		Ordonnancement o = h.run();		
+	public void initPopulation(Instance inst, Heuristic h) {
+		Instance o = h.run(inst);		
 		Random r = new Random();
 		for (int n = 0; n < populationNumber; n++) {
-			Ordonnancement c = new Ordonnancement(new ArrayList<>(o.getLesTaches()));
+			Instance c = new Instance(new ArrayList<>(o.getLesTaches()));
 			int i = r.nextInt(o.size()), j = r.nextInt(o.size()); 
 			c.swap(i, j);
 			pop.add(c);
@@ -38,7 +38,7 @@ public class EvolutionaryAlgorithm {
 	 * Selectionne 2 parents tel que plus un ordonnancement est meilleur, plus il a de chances d'etre selectionne
 	 * @return un tableau contenant 2 ordonnancements
 	 */
-	public Ordonnancement[] select() {
+	public Instance[] select() {
 		rank();
 		int i, j;
 		
@@ -53,7 +53,7 @@ public class EvolutionaryAlgorithm {
 			}
 		} while (i == j);
 
-		return new Ordonnancement[] {pop.get(i), pop.get(j)};
+		return new Instance[] {pop.get(i), pop.get(j)};
 	}
 	
 	private void rank() {
@@ -79,8 +79,8 @@ public class EvolutionaryAlgorithm {
 		
 	}
 	
-	public Ordonnancement mutation(Ordonnancement p) {
-		Ordonnancement mutated = new Ordonnancement(new ArrayList<>(p.getLesTaches()));
+	public Instance mutation(Instance p) {
+		Instance mutated = new Instance(new ArrayList<>(p.getLesTaches()));
 		Random r = new Random();
 		int i = 0, j = 0;
 		while (i == j) {

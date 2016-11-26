@@ -2,26 +2,24 @@ package algorithms;
 
 import java.util.Collections;
 
-import models.Ordonnancement;
+import models.Instance;
 
 public class RND extends Heuristic {
 	
-	public RND(Ordonnancement o) {
-		super(o);
-	}
+	public RND() {}
 
 	/**
-	 * Lance l'algorithme qui permet de generer une solution aleatoire.
-	 * @return un ordonnancement
+	 * Lance l'algorithme qui genere une solution aleatoire.
+	 * @return une instance
 	 */
-	public Ordonnancement run() {
-		Collections.shuffle(o.getLesTaches());
-		return o;
+	public Instance run(Instance i) {
+		Collections.shuffle(i.getLesTaches());
+		return i;
 	}
 	
 	@Override
 	public String toString() {
-		return "rnd";
+		return "RND";
 	}
 
 }

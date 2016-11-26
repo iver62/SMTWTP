@@ -3,46 +3,47 @@ package algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Ordonnancement;
+import models.Instance;
 import neighborhood.Neighborhood;
 import utils.MyFileWriter;
+import utils.Strategie;
 
 public class TabuSearch {
 	
-	private List<Ordonnancement> tabuList; // la liste tabou
-	private String select; // strategie de selection du meilleur voisin 
+	private List<Instance> tabuList; // la liste tabou
+	private Strategie str; // strategie de selection du meilleur voisin 
 	private List<Neighborhood> voisinages; // liste des voisinages
 	private Heuristic h; // solution initiale
-	private int n;
+	private int n; // nieme instance
 	
-	public TabuSearch(List<Neighborhood> voisinages, String select, Heuristic h, int n) {
+	public TabuSearch(List<Neighborhood> voisinages, Strategie str, Heuristic h, int n) {
 		this.voisinages = voisinages;
-		this.select = select;
+		this.str = str;
 		this.h = h;
 		this.n = n;
-		tabuList = new ArrayList<Ordonnancement>();
+		tabuList = new ArrayList<Instance>();
 	}
 
 	/**
 	 * Genere la solution initiale
-	 * @return un ordonnancement
+	 * @return une instance
 	 */
-	public Ordonnancement generateInitialSolution() {
-		return h.run();
+	public Instance generateInitialSolution(Instance inst) {
+		return h.run(inst);
 	}
 	
 	/**
-	 * Lance l'algorithme selon diff�rents param�tres : la strategie de selection, la liste des voisinages et la solution initiale 
+	 * Lance l'algorithme selon differents parametres : la strategie de selection, la liste des voisinages et la solution initiale 
 	 */
-	public void run() {
+	public void run(Instance inst) {
 		int k = 0, i = 0, j = 0;
-		Ordonnancement sol = generateInitialSolution(); // la solution initiale
+		Instance sol = generateInitialSolution(inst); // la solution initiale
 		double[] devs = new double[100*sol.size()]; long[] times = new long[100*sol.size()];
 		long debut = System.currentTimeMillis();
 		
 		while (k < 10*sol.size()) { // on sort de la boucle si on a effectue 1000 iterations sans amelioration
 			Neighborhood ngb = voisinages.get(i);
-			Ordonnancement cand = ngb.run(select, sol); // le meilleur voisin de la solution courante dans le voisinage courant
+			Instance cand = ngb.run(str, sol); // le meilleur voisin de la solution courante dans le voisinage courant
 			
 			if (!tabuList.contains(cand) && cand.eval() < sol.eval()) { // s'il est meilleur que la solution courante et qu'il n'est pas dans la liste tabou
 				long time = System.currentTimeMillis()-debut;
@@ -71,7 +72,7 @@ public class TabuSearch {
 			
 		}
 		
-		MyFileWriter.writeData("data/results/ts/"+select+"_"+h.toString()+".dat", devs, times);
+//		MyFileWriter.writeData("data/results/ts/"+select+"_"+h.toString()+".dat", devs, times);
 //		return sol;
 	}
 

@@ -2,10 +2,10 @@ package models;
 
 public class Tache implements Comparable<Tache> {
 	
-	private int n;
-	private int p;
-	private int w;
-	private int d;
+	private int n; // position de la tache dans l'instance 
+	private int p; // temps d'execution
+	private int w; // poids
+	private int d; // due date (deadline)
 	
 		
 	public Tache(int n, int p, int w, int d) {

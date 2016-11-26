@@ -4,22 +4,22 @@ import java.util.List;
 
 import algorithms.MDD;
 import algorithms.MemeticAlgo;
-import models.Ordonnancement;
+import models.Instance;
 import utils.MyFileReader;
 
 public class MainMA {
 	
 	public static String filename = "data/wt100.txt";
 	public static int nbTaches = 100;
-	public static int n = 86;
+	public static int n = 1;
 
 	public static void main(String[] args) {
-		List<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
+		List<Instance> lesInstances = MyFileReader.load(filename, nbTaches);
 		MemeticAlgo ma = new MemeticAlgo(20, 100, 0.8, 0.3);
-		Ordonnancement o = lesOrdonnancements.get(n-1); 
-		ma.initPopulation(o, new MDD(o));
+		Instance i = lesInstances.get(n-1); 
+		ma.initPopulation(i, new MDD());
 		System.out.println(ma.toString());
-		Ordonnancement sol = ma.run();
+		Instance sol = ma.run();
 		System.out.println(sol.eval() + " " + sol.deviation(n-1));
 	}
 

@@ -4,27 +4,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import models.Ordonnancement;
+import models.Instance;
 import models.Tache;
+import utils.Strategie;
 
 public class Interchange extends Neighborhood {
-
-	public Interchange() {
-		super();
-	}
 	
 	/**
-	 * Retourne le meilleur voisin d'un ordonnancement selon la methode des echanges. Si select = 'first' on 
-	 * retourne le premier meilleur voisin, si select = 'best', on retourne le meilleur voisin parmi
-	 * tous les voisins.
-	 * @param select : first ou best
-	 * @param o : un ordonnancement
+	 * Retourne le meilleur voisin d'un ordonnancement selon la methode des echanges. Si la strategie est
+	 * FIRST_IMPROVEMENT, on retourne le premier meilleur voisin, si la strategie est BEST_IMPROVEMENT, on
+	 * retourne le meilleur voisin parmi tous les voisins.
+	 * @param str : FIRST_IMPROVEMENT ou BEST_IMPROVEMENT
+	 * @param inst : une instance
 	 * @return le meilleur voisin
 	 */
-	public Ordonnancement run(String select, Ordonnancement o) {
-		int n = o.size();
-		int e = o.eval(); // l'evaluation de la solution initiale
-		Ordonnancement sol = new Ordonnancement(new ArrayList<Tache>(o.getLesTaches())); // au debut le meilleur voisin correspond a la solution initiale
+	public Instance run(Strategie str, Instance inst) {
+		int n = inst.size();
+		int e = inst.eval(); // l'evaluation de la solution initiale
+		Instance sol = new Instance(new ArrayList<Tache>(inst.getLesTaches())); // au debut le meilleur voisin correspond a la solution initiale
 		
 		List<Integer> listeI = new ArrayList<Integer>(n);
 		for (int i = 0; i < n-1; i++) {
@@ -34,23 +31,23 @@ public class Interchange extends Neighborhood {
 		
 		for (int i = 0; i < n-1; i++) {
 			int li = listeI.get(i);
-			o.swap(li, li+1);
-			if (o.eval() < e) {
-				sol = new Ordonnancement(new ArrayList<Tache>(o.getLesTaches()));
+			inst.swap(li, li+1);
+			if (inst.eval() < e) {
+				sol = new Instance(new ArrayList<Tache>(inst.getLesTaches()));
 				e = sol.eval();
-				if (select.equals("first")) { // si on a choisi first on a trouve la solution donc on sort de la boucle
-					o.swap(li+1, li);
+				if (str.equals(Strategie.FIRST_IMPROVEMENT)) { // si on a choisi first on a trouve la solution donc on sort de la boucle
+					inst.swap(li+1, li);
 					return sol;
 				}
 			}
-			o.swap(li+1, li);
+			inst.swap(li+1, li);
 		}
 		return sol;
 	}
 
 	@Override
 	public String toString() {
-		return "interchange";
+		return "INTERCHANGE";
 	}
 
 }

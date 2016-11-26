@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import models.Ordonnancement;
+import models.Instance;
 import models.Tache;
 
 public class GeneticAlgo extends EvolutionaryAlgorithm {
@@ -13,10 +13,10 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 		super(populationNumber, nbGenerations);
 	}
 	
-	public void replace(List<Ordonnancement> offsprings, List<Ordonnancement> mutations) {
+	public void replace(List<Instance> offsprings, List<Instance> mutations) {
 		
-		for (Ordonnancement off : offsprings) {
-			Ordonnancement worst = pop.get(populationNumber-1); 
+		for (Instance off : offsprings) {
+			Instance worst = pop.get(populationNumber-1); 
 			if (off.eval() < worst.eval()) {
 				pop.remove(worst);
 				pop.add(off);
@@ -24,8 +24,8 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 			}
 		}
 		
-		for (Ordonnancement mut : mutations) {
-			Ordonnancement worst = pop.get(populationNumber-1); 
+		for (Instance mut : mutations) {
+			Instance worst = pop.get(populationNumber-1); 
 			if (mut.eval() < worst.eval()) {
 				pop.remove(worst);
 				pop.add(mut);
@@ -35,7 +35,7 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 		
 	}
 	
-	public Ordonnancement[] crossover(Ordonnancement p1, Ordonnancement p2) {
+	public Instance[] crossover(Instance p1, Instance p2) {
 		List<Integer> alea = randomPos(p1.size()); // liste de positions (entre 0 et nombreDeTaches) choisies aleatoirement
 		
 		List<Integer> remainingPos1 = new ArrayList<Integer>(); // les positions des taches manquantes du 1er parent
@@ -83,16 +83,16 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 			}
 		}
 
-		return new Ordonnancement[] {new Ordonnancement(l1), new Ordonnancement(l2)};		
+		return new Instance[] {new Instance(l1), new Instance(l2)};		
 	}
 	
 	/**
 	 * Lance l'algorithme
 	 * @return le meilleur ordonnancement trouve
 	 */
-	public Ordonnancement run() {
-		List<Ordonnancement> offsprings = new ArrayList<Ordonnancement>(); // liste des enfants
-		List<Ordonnancement> mutations = new ArrayList<Ordonnancement>(); // liste des mutants
+	public Instance run() {
+		List<Instance> offsprings = new ArrayList<Instance>(); // liste des enfants
+		List<Instance> mutations = new ArrayList<Instance>(); // liste des mutants
 		
 		for (int k = 0; k < nbGenerations; k++) { // pour chaque generation
 			offsprings.clear(); // reinitialisation de la liste des offsprings
@@ -102,15 +102,15 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 			System.out.println("population triee " + toString());
 			
 			for (int i = 0; i < populationNumber/2; i++) { // a chaque tour de boucle creation de 2 offsprings
-				Ordonnancement[] parents = select(); // selection de 2 parents
-				Ordonnancement[] children = crossover(parents[0], parents[1]); // reproduction		
+				Instance[] parents = select(); // selection de 2 parents
+				Instance[] children = crossover(parents[0], parents[1]); // reproduction		
 				offsprings.add(children[0]);
 				offsprings.add(children[1]);
 			}
 			
 			for (int i = 0; i < populationNumber; i++) {
-				Ordonnancement[] parents = select(); // selection de 1 parent
-				Ordonnancement m = mutation(parents[0]); // mutation
+				Instance[] parents = select(); // selection de 1 parent
+				Instance m = mutation(parents[0]); // mutation
 				mutations.add(m);
 			}
 

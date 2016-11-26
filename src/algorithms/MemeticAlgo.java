@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import models.Ordonnancement;
+import models.Instance;
 import models.Tache;
 import neighborhood.Insert;
+import utils.Strategie;
 
 public class MemeticAlgo extends EvolutionaryAlgorithm {
 	
@@ -18,7 +19,7 @@ public class MemeticAlgo extends EvolutionaryAlgorithm {
 		this.pMut = pMut;
 	}
 	
-	public Ordonnancement crossover(Ordonnancement p1, Ordonnancement p2) {
+	public Instance crossover(Instance p1, Instance p2) {
 		List<Integer> alea = randomPos(p1.size()); // liste de positions (entre 0 et nombreDeTaches) choisies aleatoirement
 		List<Integer> remainingPos = new ArrayList<Integer>(); // les positions des taches manquantes du 1er parent		
 		List<Tache> remainingJobs = new ArrayList<Tache>(); // les taches manquantes du 1er parent
@@ -46,12 +47,12 @@ public class MemeticAlgo extends EvolutionaryAlgorithm {
 			}
 		}
 
-		return new Ordonnancement(list);		
+		return new Instance(list);		
 	}
 	
-	public void replace(List<Ordonnancement> offsprings) {
-		for (Ordonnancement off : offsprings) {
-			Ordonnancement worst = pop.get(populationNumber-1); 
+	public void replace(List<Instance> offsprings) {
+		for (Instance off : offsprings) {
+			Instance worst = pop.get(populationNumber-1); 
 			if (off.eval() < worst.eval()) {
 				pop.remove(worst);
 				pop.add(off);
@@ -60,8 +61,8 @@ public class MemeticAlgo extends EvolutionaryAlgorithm {
 		}
 	}
 	
-	public Ordonnancement run() {
-		List<Ordonnancement> offsprings = new ArrayList<Ordonnancement>();
+	public Instance run() {
+		List<Instance> offsprings = new ArrayList<Instance>();
 		for (int k = 0; k < nbGenerations; k++) { // pour chaque generation
 			offsprings.clear(); // reinitialisation de la liste des offsprings
 			System.out.println("generation " + k);
@@ -69,13 +70,13 @@ public class MemeticAlgo extends EvolutionaryAlgorithm {
 			System.out.println("population triee " + toString());
 			
 			for (int i = 0; i < coRate*populationNumber; i++) { // a chaque tour de boucle creation de 1 offspring
-				Ordonnancement[] parents = select(); // selection de 2 parents
-				Ordonnancement child = crossover(parents[0], parents[1]); // reproduction
+				Instance[] parents = select(); // selection de 2 parents
+				Instance child = crossover(parents[0], parents[1]); // reproduction
 				if (Math.random() < pMut) {
 					mutation(child);
 				}
-				HillClimbing hc = new HillClimbing("first", new Insert(), new MDD(child));
-				offsprings.add(hc.run());
+				HillClimbing hc = new HillClimbing(Strategie.FIRST_IMPROVEMENT, new Insert(), new MDD());
+				offsprings.add(hc.run(child));
 			}
 
 			replace(offsprings); // parmi la population courante et les offsprings on selectionne les meilleurs

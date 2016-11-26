@@ -4,7 +4,7 @@ import java.util.List;
 
 import algorithms.GeneticAlgo;
 import algorithms.MDD;
-import models.Ordonnancement;
+import models.Instance;
 import utils.MyFileReader;
 
 public class MainGA {
@@ -14,12 +14,12 @@ public class MainGA {
 	public static int n = 1;
 
 	public static void main(String[] args) {
-		List<Ordonnancement> lesOrdonnancements = MyFileReader.load(filename, nbTaches);
+		List<Instance> lesInstances = MyFileReader.load(filename, nbTaches);
 		GeneticAlgo ga = new GeneticAlgo(20, 2000);
-		Ordonnancement o = lesOrdonnancements.get(n-1); 
-		ga.initPopulation(o, new MDD(o));
+		Instance i = lesInstances.get(n-1); 
+		ga.initPopulation(i, new MDD());
 		System.out.println(ga.toString());
-		Ordonnancement sol = ga.run();
+		Instance sol = ga.run();
 		System.out.println(sol.eval() + " " + sol.deviation(n-1));
 	}
 

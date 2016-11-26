@@ -1,11 +1,10 @@
 package neighborhood;
 
-import models.Ordonnancement;
+import models.Instance;
+import utils.Strategie;
 
 public abstract class Neighborhood {
-			
-	public Neighborhood() {	}
 	
-	public abstract Ordonnancement run(String select, Ordonnancement o);
+	public abstract Instance run(Strategie str, Instance inst);
 
 }

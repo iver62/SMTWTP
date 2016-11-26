@@ -5,13 +5,13 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import models.Ordonnancement;
+import models.Instance;
 import models.Tache;
 
 public class MyFileReader {
 	
-	public static ArrayList<Ordonnancement> load(String filename, int nbTasks) {	
-		ArrayList<Ordonnancement> lesOrdonnancements = new ArrayList<Ordonnancement>();
+	public static ArrayList<Instance> load(String filename, int nbTasks) {	
+		ArrayList<Instance> lesOrdonnancements = new ArrayList<Instance>();
 		int tabP[] = new int[nbTasks];
 		int tabW[] = new int[nbTasks];
 		int tabD[] = new int[nbTasks];
@@ -40,7 +40,7 @@ public class MyFileReader {
 					Tache t = new Tache(taskNumber++, tabP[i], tabW[i], tabD[i]);
 					lesTaches.add(t);
 				}
-				lesOrdonnancements.add(new Ordonnancement(lesTaches));
+				lesOrdonnancements.add(new Instance(lesTaches));
 			}
 			
 			sc.close();

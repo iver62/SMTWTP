@@ -1,16 +1,9 @@
 package algorithms;
 
-import models.Ordonnancement;
+import models.Instance;
 
 public abstract class Heuristic {
-	
-	protected Ordonnancement o;
-
-	public Heuristic(Ordonnancement o) {
-		this.o = o;
-	}
-	
-	public abstract Ordonnancement run();
-	
+		
+	public abstract Instance run(Instance i);
 
 }
