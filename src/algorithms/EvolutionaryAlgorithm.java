@@ -50,18 +50,22 @@ public class EvolutionaryAlgorithm {
 		
 		do {
 			i = 0; j = 0;
-			double r1 = Math.random(), r2 = Math.random();
+			double r1 = Math.random(), r2 = Math.random(); // choix de 2 parents au hasard
 			while (proba[i] < r1) {
 				i++;
 			}
 			while (proba[j] < r2) {
 				j++;
 			}
-		} while (i == j);
+		} while (i == j); // il faut choisir 2 parents differents
 
 		return new Instance[] {pop.get(i), pop.get(j)};
 	}
 	
+	/**
+	 * Construit le tableau des rangs et le tableau des probablilites associe.
+	 * Plus une instance est bonne plus elle a de chances d'etre selectionnee.
+	 */
 	private void rank() {
 		int r = populationNumber;
 		ranks[0] = r;
@@ -85,15 +89,20 @@ public class EvolutionaryAlgorithm {
 		
 	}
 	
+	/**
+	 * Cree une instance en permutant 2 taches du parent au hasard
+	 * @param p le parent
+	 * @return une instance "mutee"
+	 */
 	public Instance mutation(Instance p) {
 		Instance mutated = new Instance(new ArrayList<>(p.getLesTaches()));
 		Random r = new Random();
 		int i = 0, j = 0;
-		while (i == j) {
+		while (i == j) { // 2 positions differentes choisies au hasard
 			i = r.nextInt(p.size());
 			j = r.nextInt(p.size());
 		}
-		mutated.swap(i, j);
+		mutated.swap(i, j); // permutation des 2 taches
 		return mutated;
 	}
 	

@@ -16,9 +16,15 @@ public class MemeticAlgo extends EvolutionaryAlgorithm {
 	public MemeticAlgo(int populationNumber, int nbGenerations, double coRate, double pMut) {
 		super(populationNumber, nbGenerations);
 		this.coRate = coRate;
-		this.pMut = pMut;
+		this.pMut = pMut; // probabilite de mutation
 	}
 	
+	/**
+	 * Cree 1 instance a partir des taches des 2 parents
+	 * @param p1 1er parent
+	 * @param p2 2eme parent
+	 * @return l'instance creee
+	 */
 	public Instance crossover(Instance p1, Instance p2) {
 		List<Integer> alea = randomPos(p1.size()); // liste de positions (entre 0 et nombreDeTaches) choisies aleatoirement
 		List<Integer> remainingPos = new ArrayList<Integer>(); // les positions des taches manquantes du 1er parent		
@@ -76,11 +82,11 @@ public class MemeticAlgo extends EvolutionaryAlgorithm {
 			for (int i = 0; i < coRate*populationNumber; i++) { // a chaque tour de boucle creation de 1 offspring
 				Instance[] parents = select(); // selection de 2 parents
 				Instance child = crossover(parents[0], parents[1]); // reproduction
-				if (Math.random() < pMut) {
+				if (Math.random() < pMut) { // mutation avec une probabilite pMut
 					mutation(child);
 				}
 				HillClimbing hc = new HillClimbing(Strategie.FIRST_IMPROVEMENT, new Insert(), new MDD());
-				offsprings.add(hc.run(child));
+				offsprings.add(hc.run(child)); // lancement de l'algorithme Hill-Climbing sur l'enfant cree 
 			}
 
 			replace(offsprings); // parmi la population courante et les offsprings on selectionne les meilleurs

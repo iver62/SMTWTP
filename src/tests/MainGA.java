@@ -14,7 +14,7 @@ public class MainGA {
 
 	public static void main(String[] args) {
 		
-		if (args.length == 5) {
+		if (args.length == 6) {
 		
 			String filename = args[0];
 			int nbTaches = Integer.parseInt(args[1]);
@@ -27,7 +27,8 @@ public class MainGA {
 			int size = lesInstances.size();
 			
 			if (n > 0 && n <= size) { // on verifie que l'instance choisie est valide 
-						
+					
+				System.out.println("Running...");
 				GeneticAlgo ga = new GeneticAlgo(popNumber, nbGen);
 				Instance inst = lesInstances.get(n-1); 
 				ga.initPopulation(inst, h);
@@ -35,7 +36,7 @@ public class MainGA {
 				Instance sol = ga.run();
 				
 				System.out.println(sol.eval() + " " + sol.deviation(n-1));
-				
+				System.out.println("Done");
 			}
 			
 			else {
@@ -44,7 +45,7 @@ public class MainGA {
 		}
 		
 		else {
-			System.out.println("Usage : \n\tjava -jar SMTWTP_GA_ONE.jar <filename> <nbTaches> <population> <generations> <nieme instance>");
+			System.out.println("Usage : \n\tjava -jar SMTWTP_GA_ONE.jar <filename> <nbTaches> <population> <generations> <heuristique> <nieme instance>");
 		}
 	}
 	

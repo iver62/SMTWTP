@@ -35,7 +35,7 @@ public class VND {
 		int k = 0, i = 0/*, j = 0*/;
 		
 		Instance sol = generateInitialSolution(inst); // generation de la solution initiale
-//		String[] devs = new String[10*sol.size()]; long[] times = new long[10*sol.size()];
+//		String[] devs = new String[100*sol.size()]; long[] times = new long[100*sol.size()];
 		
 		long deb = System.currentTimeMillis();
 		
@@ -50,7 +50,7 @@ public class VND {
 //				DecimalFormat df = new DecimalFormat("#.###");
 //				devs[j] = df.format(sol.deviation(n-1));
 //				times[j] = time;
-//				System.out.println(sol.getTime() + "ms" + " " + sol.eval());
+//				System.out.println(sol.getTime() + "ms" + " " + sol.deviation(n-1));
 //				j++;
 				k = 0; // une meilleure solution a ete trouvee k est reinitialise
 				i = 0; // on revient au premier voisinage

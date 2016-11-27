@@ -13,14 +13,19 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 		super(populationNumber, nbGenerations);
 	}
 	
+	/**
+	 * Parmi la population, la liste des offsprings et la liste des mutants on garde les meilleurs.
+	 * @param offsprings liste des enfants
+	 * @param mutations liste des mutants
+	 */
 	public void replace(List<Instance> offsprings, List<Instance> mutations) {
 		
 		for (Instance off : offsprings) {
-			Instance worst = pop.get(populationNumber-1); 
-			if (off.eval() < worst.eval()) {
-				pop.remove(worst);
-				pop.add(off);
-				Collections.sort(pop);
+			Instance worst = pop.get(populationNumber-1); // dans la population l'individu le moins bon est en derniere position car ils sont tries du meilleur au moins bon
+			if (off.eval() < worst.eval()) { // si l'offspring est meilleur que le moins bon individu
+				pop.remove(worst); // suppression du moins bon individu
+				pop.add(off); // ajout de l'offspring a sa place
+				Collections.sort(pop); // tri de la population
 			}
 		}
 		
@@ -35,6 +40,12 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 		
 	}
 	
+	/**
+	 * Cree 2 instances a partir des taches des 2 parents
+	 * @param p1 1er parent
+	 * @param p2 2eme parent
+	 * @return un tableau contenant les 2 instances creees
+	 */
 	public Instance[] crossover(Instance p1, Instance p2) {
 		List<Integer> alea = randomPos(p1.size()); // liste de positions (entre 0 et nombreDeTaches) choisies aleatoirement
 		
@@ -103,21 +114,21 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 			
 			for (int i = 0; i < populationNumber/2; i++) { // a chaque tour de boucle creation de 2 offsprings
 				Instance[] parents = select(); // selection de 2 parents
-				Instance[] children = crossover(parents[0], parents[1]); // reproduction		
-				offsprings.add(children[0]);
+				Instance[] children = crossover(parents[0], parents[1]); // reproduction -> creation de 2 enfants	
+				offsprings.add(children[0]); // ajout des enfants a la liste des offsprings
 				offsprings.add(children[1]);
 			}
 			
 			for (int i = 0; i < populationNumber; i++) {
 				Instance[] parents = select(); // selection de 1 parent
-				Instance m = mutation(parents[0]); // mutation
-				mutations.add(m);
+				Instance m = mutation(parents[0]); // mutation -> creation d'un mutant
+				mutations.add(m); // ajout du mutant a la liste des mutants
 			}
 
 			replace(offsprings, mutations); // parmi la population courante, les offsprings et les mutants on selectionne les meilleurs
 		}
 		
-		return pop.get(0);
+		return pop.get(0); // le premier individu est le meilleur
 	}
 	
 }
