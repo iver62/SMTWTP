@@ -1,11 +1,13 @@
 package algorithms;
 
+//import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import models.Instance;
 import models.Tache;
+//import utils.MyFileWriter;
 
 public class GeneticAlgo extends EvolutionaryAlgorithm {
 	
@@ -101,16 +103,21 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 	 * Lance l'algorithme genetique
 	 * @return la meilleure instance trouvee
 	 */
-	public Instance run() {
+	public Instance run(Instance inst, Heuristic h) {
+		initPopulation(inst, h);
+//		System.out.println(toString());
+		
 		List<Instance> offsprings = new ArrayList<Instance>(); // liste des enfants
 		List<Instance> mutations = new ArrayList<Instance>(); // liste des mutants
+		
+//		String[] devs = new String[nbGenerations];
 		
 		for (int k = 0; k < nbGenerations; k++) { // pour chaque generation
 			offsprings.clear(); // reinitialisation de la liste des offsprings
 			mutations.clear(); // reinitialisation de la liste des mutants
-			System.out.println("generation " + k);
+//			System.out.println("generation " + k);
 			Collections.sort(pop); // tri de la population dans l'ordre croissant, les meilleurs elements sont en debut de liste
-			System.out.println("population triee " + toString());
+//			System.out.println("population triee " + toString());
 			
 			for (int i = 0; i < populationNumber/2; i++) { // a chaque tour de boucle creation de 2 offsprings
 				Instance[] parents = select(); // selection de 2 parents
@@ -126,6 +133,11 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 			}
 
 			replace(offsprings, mutations); // parmi la population courante, les offsprings et les mutants on selectionne les meilleurs
+			
+//			DecimalFormat df = new DecimalFormat("#.###");
+//			devs[k] = df.format(pop.get(0).deviation(n));
+//			System.out.println("generation " + k + " " + devs[k]);
+//			MyFileWriter.writeData("data/results/ga/"+populationNumber+"_"+nbGenerations+"_"+h"_"+n+".dat", devs);
 		}
 		
 		return pop.get(0); // le premier individu est le meilleur

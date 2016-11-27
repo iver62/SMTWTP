@@ -63,7 +63,7 @@ public class VND {
 			
 		}
 		return sol;
-//		MyFileWriter.writeData("data/results/vnd/"+str+"_"+h.toString()+"_"+n+".dat", devs, times);
+//		MyFileWriter.writeData("data/results/vnd/"+str+"_"+h+"_"+n+".dat", devs, times);
 	}
 
 }

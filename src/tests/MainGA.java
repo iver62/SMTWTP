@@ -31,9 +31,9 @@ public class MainGA {
 				System.out.println("Running...");
 				GeneticAlgo ga = new GeneticAlgo(popNumber, nbGen);
 				Instance inst = lesInstances.get(n-1); 
-				ga.initPopulation(inst, h);
-				System.out.println(ga.toString());
-				Instance sol = ga.run();
+//				ga.initPopulation(inst, h);
+//				System.out.println(ga.toString());
+				Instance sol = ga.run(inst, h);
 				
 				System.out.println(sol.eval() + " " + sol.deviation(n-1));
 				System.out.println("Done");

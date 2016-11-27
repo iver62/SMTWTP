@@ -59,5 +59,19 @@ public class MyFileWriter {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void writeData(String filename, String[] devs) {
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+			for (int i = 0; i < devs.length; i++) {
+				bw.write(" " + devs[i]);
+				bw.newLine();
+			}
+			bw.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
