@@ -69,7 +69,7 @@ public class MainVND {
 			}
 			
 			System.out.println("Done");
-			MyFileWriter.writeData("data/results/vnd/"+str+"_"+h+"v"+v+".dat", devs, times);
+			MyFileWriter.writeData("data/results/vnd/"+str+"_"+h+"_v"+v+".dat", devs, times);
 				
 		}
 		

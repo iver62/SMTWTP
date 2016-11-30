@@ -40,7 +40,7 @@ public class TabuSearch {
 		int k = 0, i = 0/*, j = 0*/;
 		
 		Instance sol = generateInitialSolution(inst); // la solution initiale
-//		String[] devs = new String[10*sol.size()]; long[] times = new long[10*sol.size()];
+//		String[] devs = new String[100*sol.size()]; long[] times = new long[100*sol.size()];
 		long debut = System.currentTimeMillis();
 		
 		while (k < 10*sol.size()) { // on sort de la boucle si on a effectue 1000 iterations sans amelioration

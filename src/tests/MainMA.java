@@ -1,5 +1,6 @@
 package tests;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import algorithms.EDD;
@@ -14,7 +15,7 @@ public class MainMA {
 
 	public static void main(String[] args) {
 		
-		if (args.length == 8) { // on verifie qu'il y a 8 parametres
+		if (args.length == 7) { // on verifie qu'il y a 8 parametres
 			
 			String filename = args[0];
 			int nbTaches = Integer.parseInt(args[1]);
@@ -23,30 +24,37 @@ public class MainMA {
 			Heuristic h = getHeuristic(args[4]); // choix de la  solution initiale
 			double corate = Double.parseDouble(args[5]); // le taux de crossover
 			double pmut = Double.parseDouble(args[6]); // la probabilite de mutation
-			int n = Integer.parseInt(args[7]); // le numero de l'instance
+//			int n = Integer.parseInt(args[7]); // le numero de l'instance
 			
 			List<Instance> lesInstances = MyFileReader.load(filename, nbTaches);
 			int size = lesInstances.size();
+			String[] devs = new String[size]; long[] times = new long[size]; // les tableaux ou les donnees seront enregistrees
 			
-			if (n > 0 && n <= size) { // on verifie que l'instance choisie est valide 
-			
+			System.out.println("Running...");
+//			if (n > 0 && n <= size) { // on verifie que l'instance choisie est valide
+			for (int n = 0; n < size; n++) {
 				MemeticAlgo ma = new MemeticAlgo(popNumber, nbGen, corate, pmut);
-				Instance i = lesInstances.get(n-1); 
-				ma.initPopulation(i, h);
-				System.out.println(ma.toString());
-				Instance sol = ma.run();
-				System.out.println(sol.eval() + " " + sol.deviation(n-1));
-			
+				Instance inst = lesInstances.get(n); 
+//				ma.initPopulation(i, h);
+//				System.out.println(ma.toString());
+				long d = System.currentTimeMillis();
+				Instance sol = ma.run(inst, h);
+				long time = System.currentTimeMillis() - d;
+				
+				DecimalFormat df = new DecimalFormat("#.###");
+				devs[n] = df.format(sol.deviation(n)); times[n] = time; // enregistrement de la deviation et du temps de calcul moyens
+				System.out.println(n+1 + " " + sol.eval() + " " + sol.deviation(n));	
 			}
 			
-			else {
-				System.out.println("Choisir une instance dans [1..." + size + "]");
-			}
+			System.out.println("Done");
+//			else {
+//				System.out.println("Choisir une instance dans [1..." + size + "]");
+//			}
 			
 		}
 		
 		else {
-			System.out.println("Usage : \n\tjava -jar SMTWTP_MA_ONE.jar <filename> <nbTaches> <population> <generations> <heuristique> <crossover rate> <probabilite mutation> <nieme instance>");
+			System.out.println("Usage : \n\tjava -jar SMTWTP_MA_ONE.jar <filename> <nbTaches> <population> <generations> <heuristique> <crossover rate> <probabilite mutation>");
 		}
 		
 	}

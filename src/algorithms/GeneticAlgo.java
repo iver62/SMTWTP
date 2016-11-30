@@ -137,9 +137,9 @@ public class GeneticAlgo extends EvolutionaryAlgorithm {
 //			DecimalFormat df = new DecimalFormat("#.###");
 //			devs[k] = df.format(pop.get(0).deviation(n));
 //			System.out.println("generation " + k + " " + devs[k]);
-//			MyFileWriter.writeData("data/results/ga/"+populationNumber+"_"+nbGenerations+"_"+h"_"+n+".dat", devs);
 		}
 		
+//		MyFileWriter.writeData("data/results/ga/"+populationNumber+"_"+nbGenerations+"_"+h+"_"+n+".dat", devs);
 		return pop.get(0); // le premier individu est le meilleur
 	}
 	
