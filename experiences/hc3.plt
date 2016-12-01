@@ -1,6 +1,6 @@
-set output "C:/Users/Pierrick/workspace/SMTWTP/experiences/xp4.png"
-set title "Déviation de chaque instance avec 2 solutions initiales différentes et stratégie best"
+set title "Déviation de chaque instance avec 3 solutions initiales différentes, voisinage insert et stratégie best"
 set ylabel "Déviation (%)"
-set xlabel "Instances"
+set xlabel "Instance"
 set xrange [0:124]
-plot "C:/Users/Pierrick/workspace/SMTWTP/data/results/hc/BEST_IMPROVEMENT_INSERT_MDD.dat" using 0:1 with lines title "best" linetype 6, "C:/Users/Pierrick/workspace/SMTWTP/data/results/hc/BEST_IMPROVEMENT_INSERT_EDD" using 0:1 with lines title "first" linetype 7, "C:/Users/Pierrick/workspace/SMTWTP/data/results/hc/BEST_IMPROVEMENT_INSERT_RND" using 0:1 with lines title "first" linetype 4
+set yrange [0:100]
+plot "../data/results/hc/BEST_IMPROVEMENT_INSERT_MDD.dat" using 0:1 with lines title "MDD" linetype 6, "../data/results/hc/BEST_IMPROVEMENT_INSERT_EDD.dat" using 0:1 with lines title "EDD" linetype 7, "C:/Users/Pierrick/workspace/SMTWTP/data/results/hc/BEST_IMPROVEMENT_INSERT_RND.dat" using 0:1 with lines title "RND" linetype 4
