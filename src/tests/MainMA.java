@@ -10,6 +10,7 @@ import algorithms.MemeticAlgo;
 import algorithms.RND;
 import models.Instance;
 import utils.MyFileReader;
+import utils.MyFileWriter;
 
 public class MainMA {
 
@@ -47,6 +48,7 @@ public class MainMA {
 			}
 			
 			System.out.println("Done");
+			MyFileWriter.writeData("data/results/ma/"+popNumber+"_"+nbGen+"_"+h+".dat", devs, times);
 //			else {
 //				System.out.println("Choisir une instance dans [1..." + size + "]");
 //			}
