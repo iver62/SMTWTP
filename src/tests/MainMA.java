@@ -25,19 +25,16 @@ public class MainMA {
 			Heuristic h = getHeuristic(args[4]); // choix de la  solution initiale
 			double corate = Double.parseDouble(args[5]); // le taux de crossover
 			double pmut = Double.parseDouble(args[6]); // la probabilite de mutation
-//			int n = Integer.parseInt(args[7]); // le numero de l'instance
 			
 			List<Instance> lesInstances = MyFileReader.load(filename, nbTaches);
 			int size = lesInstances.size();
 			String[] devs = new String[size]; long[] times = new long[size]; // les tableaux ou les donnees seront enregistrees
 			
 			System.out.println("Running...");
-//			if (n > 0 && n <= size) { // on verifie que l'instance choisie est valide
+
 			for (int n = 0; n < size; n++) {
 				MemeticAlgo ma = new MemeticAlgo(popNumber, nbGen, corate, pmut);
 				Instance inst = lesInstances.get(n); 
-//				ma.initPopulation(i, h);
-//				System.out.println(ma.toString());
 				long d = System.currentTimeMillis();
 				Instance sol = ma.run(inst, h);
 				long time = System.currentTimeMillis() - d;
@@ -49,9 +46,6 @@ public class MainMA {
 			
 			System.out.println("Done");
 			MyFileWriter.writeData("data/results/ma/"+popNumber+"_"+nbGen+"_"+h+".dat", devs, times);
-//			else {
-//				System.out.println("Choisir une instance dans [1..." + size + "]");
-//			}
 			
 		}
 		

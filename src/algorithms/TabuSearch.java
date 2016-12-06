@@ -13,13 +13,11 @@ public class TabuSearch {
 	private Strategie str; // strategie de selection du meilleur voisin 
 	private List<Neighborhood> voisinages; // liste des voisinages
 	private Heuristic h; // solution initiale
-//	private int n; // nieme instance
 	
-	public TabuSearch(List<Neighborhood> voisinages, Strategie str, Heuristic h/*, int n*/) {
+	public TabuSearch(List<Neighborhood> voisinages, Strategie str, Heuristic h) {
 		this.voisinages = voisinages;
 		this.str = str;
 		this.h = h;
-//		this.n = n;
 		tabuList = new ArrayList<Instance>();
 	}
 
@@ -37,10 +35,9 @@ public class TabuSearch {
 	 * @return une instance
 	 */
 	public Instance run(Instance inst) {
-		int k = 0, i = 0/*, j = 0*/;
+		int k = 0, i = 0;
 		
 		Instance sol = generateInitialSolution(inst); // la solution initiale
-//		String[] devs = new String[100*sol.size()]; long[] times = new long[100*sol.size()];
 		long debut = System.currentTimeMillis();
 		
 		while (k < 10*sol.size()) { // on sort de la boucle si on a effectue 1000 iterations sans amelioration
@@ -51,13 +48,8 @@ public class TabuSearch {
 				sol = cand; // nouvel optimum local dans le voisinage courant
 				long time = System.currentTimeMillis()-debut;
 				sol.setTime(time);
-//				DecimalFormat df = new DecimalFormat("#.###");
-//				devs[j] = df.format(sol.deviation(n-1));
-//				times[j] = time;
-//				System.out.println(sol.getTime() + "ms" + " " + sol.eval());
-//				j++;
 				
-				if (tabuList.size() == sol.size()) { // si la liste tabou est pleine
+				if (tabuList.size() == 10*sol.size()) { // si la liste tabou est pleine
 					tabuList.remove(0); // on enleve le premier element
 				}
 				tabuList.add(cand); // on ajoute le meilleur voisin dans la liste
@@ -73,7 +65,6 @@ public class TabuSearch {
 			
 		}
 		
-//		MyFileWriter.writeData("data/results/ts/"+str+"_"+h+"_"+n+".dat", devs, times);
 		return sol;
 	}
 

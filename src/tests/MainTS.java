@@ -30,13 +30,10 @@ public class MainTS {
 			Strategie str = getStrategie(args[2]); // first ou best
 			Heuristic h = getHeuristic(args[3]); // choix de la  solution initiale
 			int v = Integer.parseInt(args[4]); // choix de l'ordre des voisinages
-//			int n = Integer.parseInt(args[5]); // le numero de l'instance
 			
 			ArrayList<Instance> lesInstances = MyFileReader.load(filename, nbTaches);
 			int size = lesInstances.size();
 			String[] devs = new String[size]; long[] times = new long[size];
-
-//			if (n <= lesInstances.size() && n > 0) { // si on a choisi une instance valide
 			
 			List<Neighborhood> voisinages = generateNeighborhoods(v);
 			TabuSearch ts = new TabuSearch(voisinages, str, h);
@@ -50,7 +47,7 @@ public class MainTS {
 				
 				for (int k = 0; k < nbRuns; k++) {
 					Instance opt = ts.run(inst);
-//					System.out.println("k = " + k + " " + opt.eval() + " " + opt.getTime());
+					System.out.println("k = " + k + " " + opt.eval() + " " + opt.getTime());
 					totalEval += opt.eval();
 					totalTime += opt.getTime();
 				}

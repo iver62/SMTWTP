@@ -76,9 +76,7 @@ public class MemeticAlgo extends EvolutionaryAlgorithm {
 		List<Instance> offsprings = new ArrayList<Instance>();
 		for (int k = 0; k < nbGenerations; k++) { // pour chaque generation
 			offsprings.clear(); // reinitialisation de la liste des offsprings
-//			System.out.println("generation " + k);
 			Collections.sort(pop); // tri de la population dans l'ordre croissant, les meilleurs elements sont en debut de liste
-//			System.out.println("population triee " + toString());
 			
 			for (int i = 0; i < coRate*populationNumber; i++) { // a chaque tour de boucle creation de 1 offspring
 				Instance[] parents = select(); // selection de 2 parents
