@@ -12,13 +12,16 @@ public class VND {
 	private Strategie str; // strategie de selection du meilleur voisin
 	private Heuristic h; // solution initiale
 	
-	public VND(List<Neighborhood> voisinages, Strategie str, Heuristic h/*, int n*/) {
+	public VND(List<Neighborhood> voisinages, Strategie str, Heuristic h) {
 		this.voisinages = voisinages;
 		this.str = str;
 		this.h = h;
-//		this.n = n;
 	}
 	
+	/**
+	 * Genere la solution initiale
+	 * @return une instance
+	 */
 	public Instance generateInitialSolution(Instance inst) {
 		return h.run(inst);
 	}
@@ -26,7 +29,7 @@ public class VND {
 	/**
 	 * Lance l'algorithme VND
 	 * @param inst l'instance sur laquelle l'algorithme est lance
-	 * @return une instance
+	 * @return l'optimum local des k voisinages 
 	 */
 	public Instance run(Instance inst) {
 		int k = 0, i = 0;

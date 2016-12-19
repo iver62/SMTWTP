@@ -11,13 +11,13 @@ public class MainEDD {
 	
 	public static void main(String[] args) {
 		
-		if (args.length == 2) {
+		if (args.length == 2) { // on verifie qu'il y a 2 arguments
 			String filename = args[0];
 			int nbTaches = Integer.parseInt(args[1]);
 
-			List<Instance> lesInstances = MyFileReader.load(filename, nbTaches); // tableau ou seront stockees les evaluations de chaque instance
+			List<Instance> lesInstances = MyFileReader.load(filename, nbTaches);
 			
-			int[] dataEval = new int[lesInstances.size()];
+			int[] dataEval = new int[lesInstances.size()]; // tableau ou seront stockees les evaluations de chaque instance
 			
 			for (int i = 0; i < lesInstances.size(); i++) {
 				EDD edd = new EDD();

@@ -47,7 +47,6 @@ public class MainTS {
 				
 				for (int k = 0; k < nbRuns; k++) {
 					Instance opt = ts.run(inst);
-					System.out.println("k = " + k + " " + opt.eval() + " " + opt.getTime());
 					totalEval += opt.eval();
 					totalTime += opt.getTime();
 				}

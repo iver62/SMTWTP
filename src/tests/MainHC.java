@@ -23,7 +23,7 @@ public class MainHC {
 			
 	public static void main(String[] args) {
 		
-		if (args.length == 5) { // on verifie qu'il y a bien 5 parametres
+		if (args.length == 5) { // on verifie qu'il y a 5 parametres
 
 			String filename = args[0]; // nom du fichier
 			int nbTaches = Integer.parseInt(args[1]); // nombre de taches par instance			

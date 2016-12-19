@@ -26,7 +26,7 @@ public class HillClimbing {
 	
 	/**
 	 * Lance l'algorithme Hill-Climbing selon différents paramètres : la strategie de selection, le voisinage et la solution initiale.
-	 * @return une instance
+	 * @return l'optimum local
 	 */
 	public Instance run(Instance i) {
 		Instance sol = generateInitialSolution(i); // generation de la solution initiale

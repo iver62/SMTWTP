@@ -32,7 +32,7 @@ public class TabuSearch {
 	/**
 	 * Lance l'algorithme selon differents parametres : la strategie de selection, la liste des voisinages et la solution initiale 
 	 * @param inst l'instance sur laquelle l'algorithme est lance
-	 * @return une instance
+	 * @return l'optimum local respectivement aux k voisinages
 	 */
 	public Instance run(Instance inst) {
 		int k = 0, i = 0;

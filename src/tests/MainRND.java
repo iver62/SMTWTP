@@ -13,7 +13,7 @@ public class MainRND {
 	
 	public static void main(String[] args) {
 		
-		if (args.length == 2) {
+		if (args.length == 2) { // on verifie qu'il y a 2 arguments
 			String filename = args[0];
 			int nbTaches = Integer.parseInt(args[1]);
 			
@@ -25,12 +25,12 @@ public class MainRND {
 				
 				int total = 0;
 				RND rnd = new RND();
-				for (int k = 0; k < nbRuns; k++) {
+				for (int k = 0; k < nbRuns; k++) { // lancement de 30 runs différents
 					Instance res = rnd.run(lesInstances.get(i));
 					int e = res.eval();
 					total += e;
 				}
-				dataEval[i] = total/nbRuns;
+				dataEval[i] = total/nbRuns; // moyenne de l'evaluation des 30 runs
 				System.out.println(i+1 + " " + dataEval[i]);
 				
 			}

@@ -11,7 +11,7 @@ public class MainMDD {
 
 	public static void main(String[] args) {
 		
-		if (args.length == 2) {
+		if (args.length == 2) { // on verifie qu'il y a 2 arguments
 			String filename = args[0];
 			int nbTaches = Integer.parseInt(args[1]);
 			
