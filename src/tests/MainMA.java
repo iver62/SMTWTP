@@ -50,7 +50,7 @@ public class MainMA {
 		}
 		
 		else {
-			System.out.println("Usage : \n\tjava -jar SMTWTP_MA_ONE.jar <filename> <nbTaches> <population> <generations> <heuristique> <crossover rate> <probabilite mutation>");
+			System.out.println("Usage : \n\tjava -jar SMTWTP_MA.jar <filename> <nbTaches> <population> <generations> <heuristique> <crossover rate> <probabilite mutation>");
 		}
 		
 	}

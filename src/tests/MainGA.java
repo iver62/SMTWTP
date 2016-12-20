@@ -46,7 +46,7 @@ public class MainGA {
 		}
 		
 		else {
-			System.out.println("Usage : \n\tjava -jar SMTWTP_GA_ONE.jar <filename> <nbTaches> <population> <generations> <heuristique>");
+			System.out.println("Usage : \n\tjava -jar SMTWTP_GA.jar <filename> <nbTaches> <population> <generations> <heuristique>");
 		}
 	}
 	
